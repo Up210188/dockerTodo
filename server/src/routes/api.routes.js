@@ -5,7 +5,7 @@ import { Router } from 'express';
 import { authToken } from '../middlewares/bearerToken.js';
 
 // Controladores
-import { loginUser, registerUser } from "../controller/auth.controller.js";
+import { loginUser, registerUser } from '../controller/auth.controller.js';
 import { getAllTasks } from '../controller/task.controller.js';
 
 // Instancia del Modulo Router
@@ -17,7 +17,8 @@ router.post('/login', loginUser);
 
 // Tasks Routes
 router.route('/tasks')
-    .get(authToken, getAllTasks);
+  .all(authToken)
+  .get(getAllTasks);
 
 // Exportación del Modulo
 export default router;

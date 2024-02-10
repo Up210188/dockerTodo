@@ -16,22 +16,4 @@ app.use(express.urlencoded({ extended: false })); // Enterder form-urlencode -> 
 app.use(mainRoutes);
 app.use('/api', apiRoutes);
 
-// app.get('/', (request, response) => {
-//     response.send("Soy Rogelio");
-// });
-
-// app.get('/:name', (req, res) => {
-//     const name = req.params.name; // Recuperar el valor de la URL
-//     const type = req.query.type;
-
-//     console.log({ name, type });
-
-//     res.send("Enviado!!!");
-// });
-
-// app.get('/ping', (req, res) => {
-//     res.status(200).send(req.headers);
-// });
-
 export default app;
-

@@ -1,7 +1,11 @@
 // Dependencias
-import pkg from 'express';
+// eslint-disable-next-line no-unused-vars
+import express from 'express';
 import jwt from 'jsonwebtoken';
-const { request, response } = pkg;
+
+// types
+// eslint-disable-next-line no-unused-vars
+const { request, response } = express;
 
 /**
  *
@@ -9,30 +13,30 @@ const { request, response } = pkg;
  * @param {response} res
  * @param {Function} next
  */
-export function authToken(req, res, next) {
-    try {
-        const authHeader = req.headers?.authorization
+export function authToken (req, res, next) {
+  try {
+    const authHeader = req.headers?.authorization;
 
-        const token = authHeader
-            ? authHeader.split(' ')[1]
-            : undefined;
+    if (!authHeader.startsWith('Bearer')) { return res.status(401).json({ message: 'Invalit prefix Token' }); }
 
-        // Valido que existe el token de la petición
-        if (!token)
-            return res.status(401).json({ message: "Authentication Error" });
+    const token = authHeader
+      ? authHeader.split(' ')[1]
+      : undefined;
 
-        // Se valida que el token sea correcto
-        const user = jwt.verify(token, "this is my key!");
+    // Valido que existe el token de la petición
+    if (!token) { return res.status(401).json({ message: 'Authentication Error' }); }
 
-        // Guardo el usuario en la petición http
-        req.user = user;
+    // Se valida que el token sea correcto
+    const user = jwt.verify(token, 'this is my key!');
 
-        // Es para salir del middleware!
-        next();
-    } catch (error) {
-        if (error instanceof jwt.JsonWebTokenError)
-            return res.status(403).json({ message: "Invalid Token!" });
+    // Guardo el usuario en la petición http
+    req.user = user;
 
-        res.status(400).json(error);
-    }
+    // Es para salir del middleware!
+    next();
+  } catch (error) {
+    if (error instanceof jwt.JsonWebTokenError) { return res.status(403).json({ message: 'Invalid Token!' }); }
+
+    res.status(400).json(error);
+  }
 }
