@@ -1,9 +1,9 @@
 // Dependencias
 // eslint-disable-next-line no-unused-vars
 import { request, response } from 'express';
-import jwt from 'jsonwebtoken';
 import conn from '../db.js';
 import { encryptPass, validatePass } from '../services/hash.js';
+import { generateToken } from '../services/jwt.js';
 
 /**
  *  Registra un usuario en la base de datos
@@ -46,8 +46,8 @@ export const loginUser = async (req, res) => {
 
   // Crear la sentencia SQL
   const SQL = `
-        SELECT id, password FROM TR_USER WHERE username = ? OR email = ?;
-    `;
+    SELECT id, password FROM TR_USER WHERE username = ? OR email = ?;
+  `;
   const [rows] = await conn.query(SQL, [username, email]);
   const [user] = rows;
 
@@ -59,9 +59,7 @@ export const loginUser = async (req, res) => {
   if (!isValid) { return res.status(403).json({ message: 'The password is not valid!' }); }
 
   // Generarión de JWT
-  const token = jwt.sign({ id: user.id }, 'this is my key!', {
-    expiresIn: 60
-  });
+  const token = generateToken({ id: user.id });
 
   // Respuesta al Cliente
   res.json({ token });

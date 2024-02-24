@@ -1,4 +1,5 @@
-import mysql from 'mysql2';
+import { createPool } from 'mysql2';
+import { DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER } from './keys.js';
 
 // Errores comunes en la conexión en la Base de Datos!
 const DB_ERRORS = {
@@ -9,12 +10,12 @@ const DB_ERRORS = {
 };
 
 // Generando un conexion TCP/IP a la base de datos
-const poolConnection = mysql.createPool({
-  host: 'localhost',
-  port: 3306,
-  database: 'dbTodoApp',
-  user: 'devUser',
-  password: '123456789'
+const poolConnection = createPool({
+  host: DB_HOST,
+  port: DB_PORT,
+  database: DB_NAME,
+  user: DB_USER,
+  password: DB_PASS
 });
 
 poolConnection.getConnection((error, connection) => {
