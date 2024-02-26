@@ -2,11 +2,11 @@
 import { Router } from 'express';
 
 // Middleware
-import { authToken } from '../middlewares/bearerToken.js';
+import { authToken } from '../middlewares/bearerToken.ts';
 
 // Controladores
-import { loginUser, registerUser } from '../controller/auth.controller.js';
-import { getAllTasks } from '../controller/task.controller.js';
+import { loginUser, registerUser } from '../controller/auth.controller.ts';
+import { getAllTasks } from '../controller/task.controller.ts';
 
 // Instancia del Modulo Router
 const router = Router();

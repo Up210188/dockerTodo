@@ -3,13 +3,13 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import { join } from 'node:path';
-import { createWriteStream } from 'node:fs';
+import { createWriteStream } from 'fs';
 
-import { NODE_ENV, __dirname } from './keys.js';
+import { NODE_ENV } from './keys';
 
 // Routas de la aplicacin
-import mainRoutes from './routes/routes.js';
-import apiRoutes from './routes/api.routes.js';
+import mainRoutes from './routes/routes';
+import apiRoutes from './routes/api.routes';
 
 // Instancia del objeto de express
 const app = express();
@@ -18,21 +18,17 @@ const app = express();
 app.use(cors());
 
 if (['dev', 'test'].includes(NODE_ENV)) {
-  app.use(morgan('dev'));
+	app.use(morgan('dev'));
 } else {
-  const fileConfigLog = {
-    encoding: 'utf-8',
-    flags: 'a'
-  };
 
-  app.use(morgan('combined', {
-    stream: createWriteStream(join(__dirname, 'log', 'access.log'), fileConfigLog)
-  }));
+	app.use(morgan('combined', {
+		stream: createWriteStream(join(__dirname, 'log', 'access.log'))
+	}));
 
-  app.use(morgan('combined', {
-    skip: (req, res) => res.statusCode < 400,
-    stream: createWriteStream(join(__dirname, 'log', 'error.log'), fileConfigLog)
-  }));
+	app.use(morgan('combined', {
+		skip: (_, res ) => res.statusCode < 400,
+		stream: createWriteStream(join(__dirname, 'log', 'error.log'))
+	}));
 }
 
 app.use(express.json()); // Enternder JSON -> application/json

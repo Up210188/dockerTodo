@@ -11,7 +11,7 @@ import { generateToken } from '../services/jwt.js';
  * @param {request} req Objeto Request de la libreria de express
  * @param {response} res Objeto Response de la libreria de express
  */
-export async function registerUser (req, res) {
+export async function registerUser(req, res) {
   try {
     // Recupero el cuerpo de la petición HTTP
     const { name, username, password, email, birthday } = req.body;
