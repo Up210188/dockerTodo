@@ -1,14 +1,15 @@
 // Dependencias
-import { Router } from 'express';
+import {Router} from 'express';
 
 // Middleware
-import { authToken } from '../middlewares/bearerToken.js';
+import {authToken} from '../middlewares/bearerToken.js';
 
 // Controladores
-import { loginUser, registerUser } from '../controller/auth.controller.js';
-import { getAllTasks } from '../controller/task.controller.js';
+import {loginUser, registerUser} from '../controller/auth.controller.js';
+import {getAllTasks} from '../controller/task.controller.js';
 
 // Instancia del Modulo Router
+// eslint-disable-next-line new-cap
 const router = Router();
 
 // Auth routes
@@ -17,8 +18,7 @@ router.post('/login', loginUser);
 
 // Tasks Routes
 router.route('/tasks')
-  .all(authToken)
-  .get(getAllTasks);
+	.get(authToken, getAllTasks);
 
 // Exportación del Modulo
 export default router;

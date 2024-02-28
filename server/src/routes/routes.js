@@ -1,27 +1,28 @@
 // Dependencias
-import { Router } from 'express';
+import {Router} from 'express';
 
+// eslint-disable-next-line new-cap
 const router = Router();
 
-// router.get('/', (req, res) => {
+// Router.get('/', (req, res) => {
 //     res.send("Soy Rogelio");
 // });
 
 router.get('/', (request, response) => {
-  response.send('Soy Rogelio');
+	response.send('Soy Rogelio');
 });
 
 router.get('/:name', (req, res) => {
-  const name = req.params.name; // Recuperar el valor de la URL
-  const type = req.query.type;
+	const {name} = req.params; // Recuperar el valor de la URL
+	const {type} = req.query;
 
-  console.log({ name, type });
+	console.log({name, type});
 
-  res.send('Enviado!!!');
+	res.send('Enviado!!!');
 });
 
 router.get('/ping', (req, res) => {
-  res.status(200).send(req.headers);
+	res.status(200).send(req.headers);
 });
 
 export default router;

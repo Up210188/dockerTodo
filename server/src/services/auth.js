@@ -6,13 +6,13 @@ import conn from '../db.js';
  * @param {UserSearch} userSearch Identificador unico
  * @returns {User} Usuario extraido de la base de datos
  */
-export const searchOne = async ({ email, password, username }) => {
-  // Crear la sentencia SQL
-  const SQL = `
+export const searchOne = async ({email, password, username}) => {
+	// Crear la sentencia SQL
+	const SQL = `
     SELECT id, password FROM TR_USER WHERE username = ? OR email = ?;
   `;
-  const [rows] = await conn.query(SQL, [username, email]);
-  const [user] = rows;
+	const [rows] = await conn.query(SQL, [username, email]);
+	const [user] = rows;
 };
 
 /**

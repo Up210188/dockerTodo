@@ -2,10 +2,10 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import { join } from 'node:path';
-import { createWriteStream } from 'node:fs';
+import {join} from 'node:path';
+import {createWriteStream} from 'node:fs';
 
-import { NODE_ENV, __dirname } from './keys.js';
+import {NODE_ENV, __dirname} from './keys.js';
 
 // Routas de la aplicacin
 import mainRoutes from './routes/routes.js';
@@ -18,25 +18,25 @@ const app = express();
 app.use(cors());
 
 if (['dev', 'test'].includes(NODE_ENV)) {
-  app.use(morgan('dev'));
+	app.use(morgan('dev'));
 } else {
-  const fileConfigLog = {
-    encoding: 'utf-8',
-    flags: 'a'
-  };
+	const fileConfigLog = {
+		encoding: 'utf-8',
+		flags: 'a',
+	};
 
-  app.use(morgan('combined', {
-    stream: createWriteStream(join(__dirname, 'log', 'access.log'), fileConfigLog)
-  }));
+	app.use(morgan('combined', {
+		stream: createWriteStream(join(__dirname, 'log', 'access.log'), fileConfigLog),
+	}));
 
-  app.use(morgan('combined', {
-    skip: (req, res) => res.statusCode < 400,
-    stream: createWriteStream(join(__dirname, 'log', 'error.log'), fileConfigLog)
-  }));
+	app.use(morgan('combined', {
+		skip: (req, res) => res.statusCode < 400,
+		stream: createWriteStream(join(__dirname, 'log', 'error.log'), fileConfigLog),
+	}));
 }
 
 app.use(express.json()); // Enternder JSON -> application/json
-app.use(express.urlencoded({ extended: false })); // Enterder form-urlencode -> application/form-urlencode
+app.use(express.urlencoded({extended: false})); // Enterder form-urlencode -> application/form-urlencode
 
 // Rutas de mi aplicación
 app.use(mainRoutes);
