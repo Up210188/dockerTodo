@@ -2,11 +2,11 @@
 import {Router} from 'express';
 
 // Middleware
-import {authToken} from '../middlewares/bearerToken.js';
+import { authToken } from '../middlewares/bearerToken';
 
 // Controladores
-import {loginUser, registerUser} from '../controller/auth.controller.js';
-import {getAllTasks} from '../controller/task.controller.js';
+import { loginUser, registerUser } from '../controller/auth.controller';
+import { getAllTasks } from '../controller/task.controller';
 
 // Instancia del Modulo Router
 // eslint-disable-next-line new-cap

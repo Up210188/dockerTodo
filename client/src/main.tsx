@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 //Componentes
 import App from './App';
 
-// Estilos 
+// Estilos
 import './css/index.css';
 import 'bootswatch/dist/slate/bootstrap.min.css'
 
@@ -17,7 +17,7 @@ const root = ReactDOM.createRoot(app);
 
 // Renderizado de la aplicación
 root.render(
-    <BrowserRouter>
-        <App></App>
-    </BrowserRouter>
+  <BrowserRouter>
+    <App></App>
+  </BrowserRouter>
 );
