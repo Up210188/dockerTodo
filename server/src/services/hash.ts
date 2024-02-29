@@ -1,14 +1,13 @@
 // Dependencias
-import pkg from 'bcryptjs';
-const {compare, genSalt, hash} = pkg;
+import { compare, hash, genSalt } from 'bcryptjs';
 
 /**
  * Genera un Hash de un texto aleatorio
  *
  * @param {string} password Contraseña a encriptar
- * @returns {Promise<string>}
+ * @returns constraseña Haseada
  */
-export async function encryptPass(password) {
+export async function encryptPass(password: string) {
 	// Se genera la llave para encriptar mi texto
 	const salt = await genSalt(10);
 
@@ -19,10 +18,10 @@ export async function encryptPass(password) {
 /**
  * Valida si los textos son iguales
  *
- * @param {string} password Texto sin hashear
- * @param {string} hash Texto con hash
- * @returns {Promise<boolean>} Estatus si los textos coinciden
+ * @param password Texto sin hashear
+ * @param hash Texto con hash
+ * @returns Estatus si los textos coinciden
  */
-export async function validatePass(password, hash) {
+export async function validatePass(password: string, hash: string) {
 	return await compare(password, hash);
 }

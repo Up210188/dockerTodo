@@ -1,23 +1,12 @@
 // Dependencias
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
 
-import express from 'express';
-import jwt from 'jsonwebtoken';
-
-// Types
-// eslint-disable-next-line no-unused-vars
-const {request, response} = express;
-
-/**
- *
- * @param {request} req
- * @param {response} res
- * @param {Function} next
- */
-export function authToken(req, res, next) {
+export function authToken(req: Request, res: Response, next:NextFunction ) {
 	try {
 		const authHeader = req.headers?.authorization;
 
-		if (!authHeader.startsWith('Bearer')) {
+		if (!authHeader?.startsWith('Bearer')) {
 			return res.status(401).json({message: 'Invalit prefix Token'});
 		}
 
@@ -31,18 +20,22 @@ export function authToken(req, res, next) {
 		}
 
 		// Se valida que el token sea correcto
-		const user = jwt.verify(token, 'this is my key!');
+		const user = jwt.verify(token, 'this is my key!') as User;
 
 		// Guardo el usuario en la petición http
-		req.user = user;
+		req.user = {...user};
 
 		// Es para salir del middleware!
-		next();
+		return next();
 	} catch (error) {
 		if (error instanceof jwt.JsonWebTokenError) {
 			return res.status(403).json({message: 'Invalid Token!'});
 		}
 
-		res.status(400).json({message: 'Error in the files'});
+		return res.status(400).json({message: 'Error in the files'});
 	}
+}
+
+export interface User extends JwtPayload {
+	id: string | number;
 }
