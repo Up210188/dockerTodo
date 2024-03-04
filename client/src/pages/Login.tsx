@@ -1,15 +1,11 @@
 import { login, type UserLogin } from "../services/auth";
 import { FormEvent, useState } from 'react';
 import { setToken } from '../services/localStorage';
-//import {useNavigate} from 'react-router-dom';
-
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [userLogin, setUserLogin] = useState<UserLogin>({});
-  // const [password2Display, setPassword2Display] = useState("d-none");
-  //const navigate = useNavigate();
-
-
+  const navigate = useNavigate();
 
   const handleInputChange = (e: FormEvent<HTMLInputElement>) => {
     const { value: inputValue, name: inputName } = e.currentTarget;
@@ -24,8 +20,7 @@ function Login() {
       e.preventDefault();
       const { token } = await login(userLogin);
       setToken(token);
-      console.log(token)
-
+      navigate('/');
     } catch (error) {
       console.error(error)
     }
@@ -55,12 +50,6 @@ function Login() {
                 name="password"
                 onInput={handleInputChange} />
             </div>
-            {/* <div className={`alert alert-dismissible alert-danger ${password2Display}`}>
-                              <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
-                              <a href="#password2" className="alert-link">Parece que hay un error
-                              </a><br />
-                              Las contraseñas no coinciden
-                          </div> */}
             <div className="row justify-content-center">
               <button type="submit" className="btn btn-primary btn-block">Iniciar sesión</button>
             </div>

@@ -1,20 +1,7 @@
-const BASE_URL = new URL("http://localhost:3000/api/");
-export type UserRegister = {
-    name?: string;
-    username?: string;
-    email?: string;
-    password?: string;
-    birthday?: string;
+import { getToken } from '../services/localStorage';
 
-}
-export type UserLogin = {
-    username?: string;
-    email?: string;
-    password?: string;
-}
-export type HttpResponse = {
-    token: string;
-}
+const BASE_URL = new URL("http://localhost:3000/api/");
+
 export const login = async (user: UserLogin): Promise<HttpResponse> => {
     const LOGIN_URL = new URL('login', BASE_URL)
     const resp = await fetch(LOGIN_URL, {
@@ -54,4 +41,37 @@ export function register(user: UserRegister) {
         }
         return resp.json()
     });
+}
+
+export const auth = async () => {
+    const AUTH_URL = new URL('auth', BASE_URL);
+
+    const resp = await fetch(AUTH_URL, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${getToken()}`
+        }
+    });
+
+    if (!resp.ok) {
+        throw new Error("error de Autentificacion!");
+    }
+};
+
+export type UserRegister = {
+    name?: string;
+    username?: string;
+    email?: string;
+    password?: string;
+    birthday?: string;
+
+}
+export type UserLogin = {
+    username?: string;
+    email?: string;
+    password?: string;
+}
+export type HttpResponse = {
+    token: string;
 }

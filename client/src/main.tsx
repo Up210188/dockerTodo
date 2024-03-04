@@ -8,7 +8,8 @@ import App from './App';
 
 // Estilos
 import './css/index.css';
-import 'bootswatch/dist/slate/bootstrap.min.css'
+import 'bootswatch/dist/slate/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap';
 
 //Punto de entrada
 const app = document.getElementById('root')!;
@@ -18,6 +19,6 @@ const root = ReactDOM.createRoot(app);
 // Renderizado de la aplicación
 root.render(
   <BrowserRouter>
-    <App></App>
+    <App />
   </BrowserRouter>
 );
