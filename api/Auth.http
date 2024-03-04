@@ -1,23 +1,25 @@
 ### Variables para la petición http
 @url = http://localhost:3000/api
-@token = 
-
 
 ### Create a new user
 POST {{url}}/register
 Content-Type: application/json
 
 {
-  "name": "Rogelio Trejo Estrada",
-  "username": "trejoRogelio1",
-  "email": "trejo.estrada.rogelio@gmail.com",
+  "name": "Catherine Elizabeth Mendoza de Luna",
+  "username": "eline",
+  "email": "test@test.com",
   "password": "123456789",
-  "birthday": "2001-03-24"
+  "birthday": "1997-05-27"
 }
 
 ### Login a user
 POST {{url}}/login
+Content-Type: application/json
 
 {
-     
+  "username": "eline",
+  "password": "123456789"
 }
+
+
