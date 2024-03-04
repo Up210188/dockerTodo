@@ -1,6 +1,7 @@
 // Dependencias
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
+import { JWT_SECRET } from '../keys';
 
 export function authToken(req: Request, res: Response, next:NextFunction ) {
 	try {
@@ -20,7 +21,7 @@ export function authToken(req: Request, res: Response, next:NextFunction ) {
 		}
 
 		// Se valida que el token sea correcto
-		const user = jwt.verify(token, 'this is my key!') as User;
+		const user = jwt.verify(token, JWT_SECRET) as User;
 
 		// Guardo el usuario en la petición http
 		req.user = {...user};
