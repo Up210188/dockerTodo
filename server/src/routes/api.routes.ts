@@ -7,7 +7,10 @@ import { validateSchema } from '../middlewares/validateSchema';
 
 // Controladores
 import { loginUser, registerUser, validarToken } from '../controller/auth.controller';
-import { getAllTasks } from '../controller/task.controller';
+import { 
+	getAllTasks,
+	updateTask
+} from '../controller/task.controller';
 
 // Schemas
 import {UserLoginSchema, UserRegisterSchema} from '../schemas/UserSchema';
@@ -23,6 +26,10 @@ router.post('/auth', authToken ,validarToken);
 // Tasks Routes
 router.route('/tasks')
 	.get(authToken, getAllTasks);
+
+router.route('/task')
+	.get(authToken)
+	.patch(authToken, updateTask);
 
 // Exportación del Modulo
 export default router;
