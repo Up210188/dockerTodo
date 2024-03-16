@@ -69,7 +69,7 @@ export const loginUser: RequestHanddleLogin = async (req, res) => {
  * @param req Objeto Request de la libreria de express
  * @param res Objeto Response de la libreria de express
  */
-export const validarToken = (req: Request, res: Response) => res.status(204);
+export const validarToken = (req: Request, res: Response) => res.status(204).json();
 
 // Validacion de Cuerpo de la peticion
 interface RequestHanddleRegister extends RequestHandler<any, any, UserRegister> {
