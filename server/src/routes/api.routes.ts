@@ -9,7 +9,7 @@ import { validateSchema } from '../middlewares/validateSchema';
 import { loginUser, registerUser, validarToken } from '../controller/auth.controller';
 import { 
 	getAllTasks,
-	updateTask
+	updateTask, getOneTask
 } from '../controller/task.controller';
 
 // Schemas
@@ -30,6 +30,10 @@ router.route('/tasks')
 router.route('/task')
 	.get(authToken)
 	.patch(authToken, updateTask);
+router.route('/tasks/:id')
+    .all(authToken)
+    .get(getOneTask);
+	
 
 // Exportación del Modulo
 export default router;

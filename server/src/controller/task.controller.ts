@@ -18,7 +18,7 @@ export async function getAllTasks(req: Request, res: Response) {
     return res.json(tasks)
 }
 
-export async function getOneTaks(req: Request, res: Response) {
+export async function getOneTask(req: Request, res: Response) {
     //Extraer id de usuario.
     const id: string | undefined = req.params.id
     

@@ -19,6 +19,7 @@ function Login() {
     try {
       e.preventDefault();
       const { token } = await login(userLogin);
+
       setToken(token);
       navigate('/');
     } catch (error) {
