@@ -23,7 +23,7 @@ const poolConnection = createPool({
 
 poolConnection.getConnection((error, connection) => {
 	if (error) {
-		// Mamejo de los posibles errores de conexion a la base de datos
+		// Manejo de los posibles errores de conexion a la base de datos
 		DB_ERRORS[error.code!]
 			? console.error(DB_ERRORS[error.code!])
 			: DEFAULT_ERROR(error);
