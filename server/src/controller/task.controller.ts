@@ -1,36 +1,34 @@
 // Dependencias
 // eslint-disable-next-line no-unused-vars
 import {Request, Response} from 'express';
-import { getTasksService, createTaskService, getTaskService, updateTaskService } from '../services/tasks';
+import { getTasksService, createTaskService, getTaskService, updateTaskService, deleteTaskService } from '../services/tasks';
 
 export async function getAllTasks(req: Request, res: Response) {
 	// Obtenemos el ID a partir de la autentificación del usuario
-    const user_id: number | string = 1
-    const task_id: number = 1
+    const user_id: number | string = req.user.id
     
     // Realizamos la consulta a las tareas
 	const tasks = await getTasksService(user_id)
     
-    // Verifica si el usuario tiene tareas
-    // if (!tasks){
-    //     return res.json('Not tasks')
-    // }
-    return res.json(tasks)
+    res.json(tasks)
 }
 
 export async function getOneTask(req: Request, res: Response) {
     //Extraer id de usuario.
-    const id: string | undefined = req.params.id
+    const taskId: string | undefined = req.params.id;
+    const userId: string | number = req.user.id;
     
     // Obtenemos la tarea
-    const [task] = await getTaskService(id);
+    const [task]: any = await getTaskService(taskId, userId);
 
     //Valido si existe la tarea
-    if (!task)
-        return res.status(404).json({ message: "Task not found" });
+    if (!task){
+        res.status(404).json({ message: "Task not found" });
+        return;
+    }
 
     res.json({task});
-    return;
+
 }
 
 export async function createTask(req: Request, res: Response) {
@@ -41,7 +39,7 @@ export async function createTask(req: Request, res: Response) {
     }
 
     try {
-        const result = await createTaskService(body)
+        const result = await createTaskService(req.user.id ,body)
 
         if (result) {
             // Devolver el resultado de la consulta
@@ -57,45 +55,24 @@ export async function createTask(req: Request, res: Response) {
 }
 
 export async function updateTask(req: Request, res: Response) {
-        // Recuperar los datos de la solicitud HTTP
-        const { fk_statusid, fk_priorityid, name, descripcion, deadline } = req.body;
-
-        const user_id = req.user.id;
-        const task_id = 1;
-        
-        // Generar la consulta SQL para verificar si la tarea existe
-        const checkExistenceSQL = "SELECT COUNT(*) AS count FROM tr_task WHERE id = ?";
+        const userId = req.user.id;
+        const taskId = req.params.id;
     
-        try {
-            // Ejecutar la consulta SQL para verificar si la tarea existe
-            const rows = await updateTaskService(user_id, task_id)
-    
-            // Obtener el número de filas retornadas por la consulta
-            //const count = rows[0].count;
-    
-            // Verificar si la tarea existe en la base de datos
-            //if (count === 0) {
-            //    // Si no existe la tarea, devolver un mensaje de error
-            //    return res.status(404).json({ message: "La tarea con el ID proporcionado no existe." });
-            //}
-    
-            // Generar la consulta SQL para actualizar la tarea
-            //const updateSQL = "UPDATE tr_task SET fk_statusid=?, fk_priorityid=?, name=?, descripcion=?, deadline=? WHERE id=?";
-    
-            //// Ejecutar la consulta SQL para actualizar la tarea
-            //await conn.execute(updateSQL, [fk_statusid, fk_priorityid, name, descripcion, deadline, id]);
-    
-            // Respuesta al cliente indicando que la tarea ha sido actualizada exitosamente
-            // res.status(200).json({ message: "La tarea se actualizó exitosamente." });
-        } catch (error) {
-            // Manejar errores
-            console.error("Error al actualizar la tarea:", error);
-            res.status(500).json({ error: "Error al actualizar la tarea." });
+        const resp = await updateTaskService(userId, taskId, req.body)
+        if (typeof resp === 'boolean') {
+            if (resp === true)
+                res.json({ message: "Tarea actualizada" })
+            else
+                res.status(404).json({ message: "El usuario o tarea no existe." })
+        } else {
+            res.status(500).json({ message: resp });
         }
-        return;
 }
 
-export function deleteTask(req: Request, res: Response) {
-
+export async function deleteTask(req: Request, res: Response) {
+    const taskId = req.params.id;
+    const userId = req.user.id // Obtener el ID de la tarea de los parámetros de la URL
+    const resp = await deleteTaskService(userId, taskId)
+    // Respuesta al cliente indicando que la tarea se borro exitosamente 
+    res.status(200).json({ message: resp });
 }
-
