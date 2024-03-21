@@ -11,6 +11,7 @@ export const login = async (user: UserLogin): Promise<HttpResponse> => {
         },
         body: JSON.stringify(user)
     });
+
     if (!resp.ok) {
         if (resp.status === 404) {
             throw new Error("El usuario no se encontró");
