@@ -60,7 +60,7 @@ export const createTaskService = async (userId: string | number, body: Task) => 
     const taskId = rowsTask.insertId
 
     // Crear y ejecutar un Query para crear la relación en TR_USER_TASK
-    const insertUserTaskSQL = "INSER INTO TR_USER_TASK (idTask, idUser) VALUES (?,?);"
+    const insertUserTaskSQL = "INSERT INTO TR_USER_TASK (idTask, idUser) VALUES (?,?);"
     const [rowsUserTask]: any = await conn.query(insertUserTaskSQL, [userId, taskId])
 
     // Verificar que si se haya creado el registro
