@@ -7,35 +7,35 @@ import { validateSchema } from '../middlewares/validateSchema';
 
 // Controladores
 import { loginUser, registerUser, validarToken } from '../controller/auth.controller';
-import { 
+import {
 	createTask,
 	deleteTask,
 	getAllTasks,
-	getOneTak,
-	updateTask
+	updateTask, getOneTask
 } from '../controller/task.controller';
 
 // Schemas
-import {UserLoginSchema, UserRegisterSchema} from '../schemas/UserSchema';
+import { UserLoginSchema, UserRegisterSchema } from '../schemas/UserSchema';
 
 // Instancia del Modulo Router
 const router = Router();
 
 // Auth routes
-router.post('/register', validateSchema(UserRegisterSchema) ,registerUser);
-router.post('/login', validateSchema(UserLoginSchema) ,loginUser);
-router.post('/auth', authToken ,validarToken);
+router.post('/register', validateSchema(UserRegisterSchema), registerUser);
+router.post('/login', validateSchema(UserLoginSchema), loginUser);
+router.post('/auth', authToken, validarToken);
 
+// Tasks routes
 router.route('/task')
+	.get(authToken)
+	.patch(authToken, updateTask);
+router.route('/tasks/:id')
 	.all(authToken)
-	.get(getAllTasks)
-	.post(createTask);
+	.get(getOneTask);
+router.route('/tasks')
+	.all(authToken)
+	.get(getAllTasks);
 
-router.route('/task/:id')
-	.all(authToken)
-	.get(getOneTak)
-	.patch(updateTask)
-	.delete(deleteTask);
 
 // Exportación del Modulo
 export default router;
