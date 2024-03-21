@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import ModalInsert from "../components/ModalInsert";
 import Tarea from "../components/Tarea";
-import { tasks as data } from "../task";
+//import { tasks as data } from "../task";
+import { getAllTasks } from "../services/tasks";
 
 interface Task {
   id: number;
@@ -17,7 +18,18 @@ const Home: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
-    setTasks(data);
+    const fetchData = async () => {
+      try {
+        const tasks = await getAllTasks(); // Llama a la función getAllTasks para obtener los datos
+        console.log(tasks)
+        setTasks(tasks)
+        //setTasks(tasksData); // Establece los datos obtenidos del servidor en el estado local
+      } catch (error) {
+        console.error('Error al obtener las tareas:', error);
+      }
+    };
+    fetchData();
+    //setTasks(data);
   }, []);
 
   const toggleFormulario = (): void => {

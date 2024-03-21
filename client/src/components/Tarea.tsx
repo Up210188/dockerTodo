@@ -28,7 +28,7 @@ const Tarea: React.FC<Props> = ({ tasks }) => {
                 <tr>
                     <th>Nombre</th>
                     <th>Descripción</th>
-                    <th>Fecha</th>
+                    <th>Fecha Limite</th>
                     <th>Estatus</th>
                     <th>Prioridad</th>
                     <th>Actualizar</th>

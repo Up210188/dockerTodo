@@ -2,8 +2,8 @@ import { getToken } from './localStorage';
 
 const BASE_URL = new URL('http://localhost:3000/api/');
 
-export const getAllTasks = async () => {
-  const TASK_URL = new URL('tasks', BASE_URL);
+export const getAllTasks = async (): Promise<Task[]> => {
+  const TASK_URL = new URL('task', BASE_URL);
 
   const resp = await fetch(TASK_URL, {
     method: 'GET',
@@ -19,6 +19,15 @@ export const getAllTasks = async () => {
     if ([401, 403].includes(resp.status))
       throw new Error("Error de Autentificación")
   }
-
-  return resp.json();
+  const data: Task[] = await resp.json(); // Tipar directamente la respuesta como un arreglo de tareas
+  return data;
 };
+
+export type Task = {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  fecha: string;
+  estatus: string;
+  prioridad: string;
+}
