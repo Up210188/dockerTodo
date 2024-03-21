@@ -13,7 +13,7 @@ export async function getAllTasks(req: Request, res: Response) {
     res.json(tasks)
 }
 
-export async function getOneTask(req: Request, res: Response) {
+export async function getOneTak(req: Request, res: Response) {
     //Extraer id de usuario.
     const taskId: string | undefined = req.params.id;
     const userId: string | number = req.user.id;

@@ -2,9 +2,9 @@ import conn from '../db';
 
 export const getTaskService = async (taskId: string | undefined, userId: string | number) => {
     //Crear la sentencia 
-    // TRT.id,
-    // TU.name as Usuario,
     const SQL = `select
+    TRT.id,
+    TU.name as Usuario,
     TRT.name as Título,
     TRT.description as Descripción,
     TCP.description as Prioridad,
@@ -16,46 +16,18 @@ export const getTaskService = async (taskId: string | undefined, userId: string 
     join TC_PRIORITY TCP ON TRT.fk_priorityid = TCP.id
     join TC_STATUS TCS ON TCS.id = TRT.fk_statusid
     where TUT.idTask = ? AND TUT.idUser = ?;`
-    /*`select
-    TRT.id,
-    TRT.name as Título,
-    TRT.description as Descripción,
-    TCP.description as Prioridad,
-    TCS.description as Estado,
-    TRT.deadline
-    from tr_task TRT 
-    inner join tc_priority TCP on TRT.fk_priorityid = TCP.id
-    inner join tc_status TCS on TRT.fk_statusid = TCS.id
-    where TRT.id = ?;`*/
-    /**/
-    const [res] = await conn.query(SQL, [taskId,userId]);
+
+    const [res] = await conn.query(SQL, [taskId, userId]);
     return res;
 }
 
 export  const getTasksService = async (user_id: number | string) => {
-	const query = `SELECT 
-	tt.name as Título,
-    tt.description as Descripción,
-    TCP.description as Prioridad,
-    TCS.description as Estado,
-	tt.deadline
-		FROM TR_TASK tt
-		INNER JOIN TR_USER_TASK tut
-		INNER JOIN TR_USER tu
-        join TC_PRIORITY TCP ON tt.fk_priorityid = TCP.id
-		join TC_STATUS TCS ON TCS.id = tt.fk_statusid
-		WHERE tt.id = tut.idTask 
-		AND tut.idUser = tu.id
-		AND tu.id=?;`
-
-    /*
-    `SELECT tt.name FROM TR_TASK tt
+	const query = `SELECT tt.name FROM TR_TASK tt
     INNER JOIN TR_USER_TASK tut
     INNER JOIN TR_USER tu
     WHERE tt.id = tut.idTask 
     AND tut.idUser = tu.id
     AND tu.id=?;`
-     */
     
     const tasks = await conn.query(query, user_id)
 
