@@ -30,15 +30,12 @@ const Home: React.FC = () => {
     };
     fetchData();
     //setTasks(data);
-  }, []);
+  }, [mostrarFormulario]);
 
   const toggleFormulario = (): void => {
     setMostrarFormulario(!mostrarFormulario);
   };
 
-  function createTask(task: Task): void {
-    setTasks([...tasks, task]);
-  }
 
   return (
     <>
@@ -49,7 +46,7 @@ const Home: React.FC = () => {
         <div className="d-flex justify-content-between align-items-center">
           <h1 className="text-center">Lista de tareas</h1>
           <div>
-            <ModalInsert createTask={createTask} showModal={mostrarFormulario} onClose={toggleFormulario} />
+            <ModalInsert showModal={mostrarFormulario} onClose={toggleFormulario} />
             <button className="btn btn-primary ms-3" onClick={toggleFormulario}>Agregar una nueva tarea</button>
           </div>
         </div>

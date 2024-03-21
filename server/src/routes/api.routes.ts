@@ -11,7 +11,7 @@ import {
 	createTask,
 	deleteTask,
 	getAllTasks,
-	getOneTak,
+	getOneTask,
 	updateTask
 } from '../controller/task.controller';
 
@@ -33,7 +33,7 @@ router.route('/task')
 
 router.route('/task/:id')
 	.all(authToken)
-	.get(getOneTak)
+	.get(getOneTask)
 	.patch(updateTask)
 	.delete(deleteTask);
 

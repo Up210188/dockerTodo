@@ -40,7 +40,7 @@ const Tarea: React.FC<Props> = ({ tasks }) => {
                     <tr key={task.id}>
                         <td>{task.nombre}</td>
                         <td>{task.descripcion}</td>
-                        <td>{task.fecha}</td>
+                        <td>{formatDate(task.fecha)}</td>
                         <td>{task.estatus}</td>
                         <td>{task.prioridad}</td>
                         <td>
@@ -55,6 +55,12 @@ const Tarea: React.FC<Props> = ({ tasks }) => {
         </table>
     );
 };
+
+// Función para formatear la fecha
+export function formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    return `${date.toLocaleDateString("es-MX")} ${date.toLocaleTimeString("es-MX")}`;
+}
 
 export default Tarea;
 
