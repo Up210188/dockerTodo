@@ -23,6 +23,7 @@ export const getTaskService = async (taskId: string | undefined, userId: string 
 
 export const getTasksService = async (user_id: number | string) => {
     const query = `SELECT 
+    tt.id as id,
 	tt.name as nombre,
     tt.description as descripcion,
     tt.deadline as fecha,

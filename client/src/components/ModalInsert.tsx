@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {createTask} from "../services/tasks.ts"
 
-const ModalInsert: React.FC<ModalInsertProps> = ({ showModal, onClose }) => {
+const ModalInsert: React.FC<ModalInsertProps> = ({ showModal, onClose, onTaskCreated }) => {
   const [formData, setFormData] = useState<TaskInsert>({
     name: "",
     description: "",
@@ -18,13 +18,14 @@ const ModalInsert: React.FC<ModalInsertProps> = ({ showModal, onClose }) => {
     }));
   };
   
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(formData)
     try {
-      createTask(formData)
+      await createTask(formData); // Espera a que la tarea se cree antes de cerrar el modal
+      onTaskCreated(); // Llama al callback para notificar que se creó una tarea
     } catch (error) {
-
+      console.error("Error al crear la tarea:", error);
     }
     
     onClose(); // Cierra el modal después de agregar la tarea
@@ -95,6 +96,7 @@ const ModalInsert: React.FC<ModalInsertProps> = ({ showModal, onClose }) => {
 interface ModalInsertProps {
   showModal: boolean;
   onClose: () => void;
+  onTaskCreated: () => void; // Nuevo callback para notificar que se creó una tarea
 }
 /*
   "name": "Trapear",
