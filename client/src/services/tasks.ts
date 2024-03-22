@@ -1,4 +1,5 @@
 import { TaskInsert } from '../components/ModalInsert';
+import { TaskUpdate } from '../components/ModalUpdate';
 import { getToken } from './localStorage';
 
 const BASE_URL = new URL('http://localhost:3000/api/');
@@ -44,11 +45,32 @@ export const createTask = async (taskInsert: TaskInsert): Promise<Boolean> =>{
   return seCreo;
 };
 
-export type Task = {
-  id: number;
-  nombre: string;
-  descripcion: string;
-  fecha: string;
-  estatus: string;
-  prioridad: string;
-}
+
+
+export const updateTask = async (idtask:number, taskData:TaskUpdate) => {
+  
+  const TASK_URL = new URL(`tasks/${idtask}`, BASE_URL);
+
+  const resp = await fetch(TASK_URL, {
+    method: 'PATCH',
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${getToken()}`
+    },
+    body: JSON.stringify(taskData)
+  });
+  // Verificar si la solicitud fue exitosa
+  if (resp.ok) {
+    console.log('Tarea actualizada exitosamente.');
+  } else {
+    console.error('Error al actualizar la tarea:', resp.statusText);
+  }}
+
+  export type Task = {
+    id: number;
+    nombre: string;
+    descripcion: string;
+    fecha: string;
+    estatus: string;
+    prioridad: string;
+  }

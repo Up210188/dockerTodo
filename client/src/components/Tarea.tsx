@@ -1,4 +1,5 @@
-import React from 'react';
+import { useState } from "react";
+import ModalUpdate from "./ModalUpdate";
 
 interface Task {
     id: number;
@@ -14,6 +15,12 @@ interface Props {
 }
 
 const Tarea: React.FC<Props> = ({ tasks }) => {
+    
+    const [mostrarFormulario, setMostrarFormulario] = useState<boolean>(false);
+
+    const toggleFormulario = () => {
+        setMostrarFormulario(!mostrarFormulario);
+    };
     if (tasks.length === 0) {
         return (
             <div className="text-center">
@@ -23,6 +30,9 @@ const Tarea: React.FC<Props> = ({ tasks }) => {
     }
 
     return (
+        <>
+        <div className={`modal-backdrop fade ${mostrarFormulario ? 'show' : ''}`} style={{ zIndex: mostrarFormulario ? 1030 : -1 }}></div>
+        <ModalUpdate showModal={mostrarFormulario} onClose={() => setMostrarFormulario(false)} />
         <table className="table table-striped">
             <thead>
                 <tr>
@@ -44,7 +54,7 @@ const Tarea: React.FC<Props> = ({ tasks }) => {
                         <td>{task.estatus}</td>
                         <td>{task.prioridad}</td>
                         <td>
-                            <button className="btn btn-primary">Actualizar</button>
+                            <button className="btn btn-primary"onClick={() => toggleFormulario()}>Actualizar</button>
                         </td>
                         <td>
                             <button className="btn btn-danger">Eliminar</button>
@@ -53,6 +63,7 @@ const Tarea: React.FC<Props> = ({ tasks }) => {
                 ))}
             </tbody>
         </table>
+        </>
     );
 };
 
