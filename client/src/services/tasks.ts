@@ -67,10 +67,9 @@ export const createTask = async (taskInsert: TaskInsert): Promise<Boolean> =>{
 };
 
 
-
 export const updateTask = async (idtask:number, taskData:TaskUpdate) => {
   
-  const TASK_URL = new URL(`tasks/${idtask}`, BASE_URL);
+  const TASK_URL = new URL(`task/${idtask}`, BASE_URL);
 
   const resp = await fetch(TASK_URL, {
     method: 'PATCH',
@@ -80,6 +79,7 @@ export const updateTask = async (idtask:number, taskData:TaskUpdate) => {
     },
     body: JSON.stringify(taskData)
   });
+  console.log(TASK_URL);
   // Verificar si la solicitud fue exitosa
   if (resp.ok) {
     console.log('Tarea actualizada exitosamente.');
