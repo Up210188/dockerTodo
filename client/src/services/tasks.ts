@@ -25,6 +25,27 @@ export const getAllTasks = async (): Promise<Task[]> => {
   return data;
 };
 
+export const getOneTask = async (idtask: string): Promise<Task> => {
+  const TASK_URL = new URL(`tasks/${idtask}`, BASE_URL);
+
+  const resp = await fetch(TASK_URL, {
+    method: 'GET',
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${getToken()}`
+    }
+  });
+
+  if (!resp.ok) {
+    resp.status
+    //if (resp.status === 401 || resp.status === 403)
+    if ([401, 403].includes(resp.status))
+      throw new Error("Error de Autentificación")
+  }
+  const data: Task = await resp.json(); // Tipar directamente la respuesta como un arreglo de tareas
+  return data;
+};
+
 export const createTask = async (taskInsert: TaskInsert): Promise<Boolean> =>{
   const TASK_URL = new URL('task', BASE_URL);
   const resp = await fetch(TASK_URL, {
