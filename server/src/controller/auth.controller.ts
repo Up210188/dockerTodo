@@ -30,7 +30,7 @@ export const registerUser: RequestHanddleRegister = async (req, res) => {
 
 		return res.json(resp);
 	} catch (error) {
-
+		console.log(error)
 		return res.json({ message: 'Server error' });
 	}
 

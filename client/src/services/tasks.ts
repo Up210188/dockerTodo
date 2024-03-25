@@ -25,8 +25,8 @@ export const getAllTasks = async (): Promise<Task[]> => {
   return data;
 };
 
-export const getOneTask = async (idtask: string): Promise<Task> => {
-  const TASK_URL = new URL(`tasks/${idtask}`, BASE_URL);
+export const getOneTask = async (idtask: number): Promise<Task> => {
+  const TASK_URL = new URL(`task/${idtask}`, BASE_URL);
 
   const resp = await fetch(TASK_URL, {
     method: 'GET',

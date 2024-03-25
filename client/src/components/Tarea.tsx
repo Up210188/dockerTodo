@@ -17,8 +17,10 @@ interface Props {
 const Tarea: React.FC<Props> = ({ tasks }) => {
     
     const [mostrarFormulario, setMostrarFormulario] = useState<boolean>(false);
+    const [idTask,setIdTask]=useState<number>()
 
-    const toggleFormulario = () => {
+    const toggleFormulario = (idTask:number) => {
+        setIdTask(idTask);
         setMostrarFormulario(!mostrarFormulario);
     };
     if (tasks.length === 0) {
@@ -29,10 +31,15 @@ const Tarea: React.FC<Props> = ({ tasks }) => {
         )
     }
 
+    function onClose(){
+        setMostrarFormulario(false);
+        setIdTask(undefined);
+    }
+
     return (
         <>
         <div className={`modal-backdrop fade ${mostrarFormulario ? 'show' : ''}`} style={{ zIndex: mostrarFormulario ? 1030 : -1 }}></div>
-        <ModalUpdate showModal={mostrarFormulario} onClose={() => setMostrarFormulario(false)} />
+        <ModalUpdate idTask={idTask!} showModal={mostrarFormulario} onClose={onClose} />
         <table className="table table-striped">
             <thead>
                 <tr>
@@ -54,7 +61,7 @@ const Tarea: React.FC<Props> = ({ tasks }) => {
                         <td>{task.estatus}</td>
                         <td>{task.prioridad}</td>
                         <td>
-                            <button className="btn btn-primary"onClick={() => toggleFormulario()}>Actualizar</button>
+                            <button className="btn btn-primary"onClick={() => toggleFormulario(task.id)}>Actualizar</button>
                         </td>
                         <td>
                             <button className="btn btn-danger">Eliminar</button>

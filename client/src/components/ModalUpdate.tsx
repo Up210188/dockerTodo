@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { updateTask } from "../services/tasks";
+import React, { useEffect, useState } from "react";
+import { getOneTask, updateTask } from "../services/tasks";
 
 
-const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose }) => {
+const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask }) => {
+  const [task, setTask] = useState<{name: string}>();
   const [formData, setFormData] = useState<TaskUpdate>({
     name: "",
     description: "",
@@ -11,6 +12,21 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose }) => {
     fk_priorityid: ""
   });
 
+  useEffect(() => {
+    if (idTask) {
+      (async () => {
+        try {
+          const task = await getOneTask(idTask) as any;
+          
+          setTask({
+            name: task.task.Título
+          })
+        } catch (error) {
+          console.log(error);
+        }
+      })()
+    }
+  }, [showModal])
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const { name, value } = e.target;
     setFormData(prevData => ({
@@ -22,12 +38,12 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await updateTask(16,formData); // Espera a que la tarea se cree antes de cerrar el modal
+      await updateTask(idTask, formData); // Espera a que la tarea se cree antes de cerrar el modal
       console.log(formData);
     } catch (error) {
       console.error("Error al crear la tarea:", error);
     }
-    
+
     onClose(); // Cierra el modal después de agregar la tarea
   }
 
@@ -56,7 +72,7 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose }) => {
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label htmlFor="nombre">Nombre:</label>
-                  <input onChange={handleChange} type="text" className="form-control" id="nombre" name="name" required placeholder="Ingresa el nombre de la tarea" />
+                  <input onChange={handleChange} value={task?.name} type="text" className="form-control" id="nombre" name="name" required placeholder="Ingresa el nombre de la tarea" />
                 </div>
                 <div className="form-group">
                   <label htmlFor="descripcion">Descripción:</label>
@@ -104,6 +120,7 @@ export default ModalUpdate;
 interface ModalUpdateProps {
   showModal: boolean;
   onClose: () => void;
+  idTask: number;
 }
 
 /* interface Task {
