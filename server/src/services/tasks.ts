@@ -22,7 +22,8 @@ export const getTaskService = async (taskId: string | undefined, userId: string 
 }
 
 export  const getTasksService = async (user_id: number | string) => {
-	const query = `SELECT tt.name FROM TR_TASK tt
+	const query = `SELECT tt.id, tt.name, tt.description, tt.deadline 
+    FROM TR_TASK tt
     INNER JOIN TR_USER_TASK tut
     INNER JOIN TR_USER tu
     WHERE tt.id = tut.idTask 
