@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import { getOneTask, updateTask } from "../services/tasks";
 
 const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask }) => {
-  const [task, setTask] = useState<TaskUpdate>();
+  const [task, setTask] = useState<{name: string, description: string, deadline: string, fk_statusid:string, fk_priorityid:string}>({ 
+    name: "", 
+    description: "", 
+    deadline: "", 
+    fk_statusid: "", 
+    fk_priorityid: "" 
+  });
   const [formData, setFormData] = useState<TaskUpdate>({
     name: "",
     description: "",

@@ -3,18 +3,14 @@ import conn from '../db';
 export const getTaskService = async (taskId: string | undefined, userId: string | number) => {
     //Crear la sentencia 
     const SQL = `select
-    TRT.id,
-    TU.name as Usuario,
-    TRT.name as Título,
-    TRT.description as Descripción,
-    TCP.description as Prioridad,
-    TCS.description as Estado,
-    TRT.deadline
+    TRT.name,
+    TRT.description as description,
+    TRT.deadline,
+    TRT.fk_statusid,
+    TRT.fk_priorityid
     from TR_USER_TASK TUT
     join TR_USER TU ON TUT.idUser = TU.id
     join TR_TASK TRT ON TUT.idTask = TRT.id 
-    join TC_PRIORITY TCP ON TRT.fk_priorityid = TCP.id
-    join TC_STATUS TCS ON TCS.id = TRT.fk_statusid
     where TUT.idTask = ? AND TUT.idUser = ?;`
 
     const [res] = await conn.query(SQL, [taskId, userId]);
