@@ -27,7 +27,7 @@ export async function getOneTask(req: Request, res: Response) {
         return;
     }
 
-    res.json({task});
+    res.json(task);
 
 }
 
