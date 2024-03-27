@@ -25,7 +25,7 @@ export const getAllTasks = async (): Promise<Task[]> => {
   return data;
 };
 
-export const getOneTask = async (idtask: number): Promise<Task> => {
+export const getOneTask = async (idtask: number) => {
   const TASK_URL = new URL(`task/${idtask}`, BASE_URL);
 
   const resp = await fetch(TASK_URL, {
@@ -42,7 +42,7 @@ export const getOneTask = async (idtask: number): Promise<Task> => {
     if ([401, 403].includes(resp.status))
       throw new Error("Error de Autentificación")
   }
-  const data: Task = await resp.json(); // Tipar directamente la respuesta como un arreglo de tareas
+  const data = await resp.json();
   return data;
 };
 

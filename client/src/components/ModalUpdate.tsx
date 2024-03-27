@@ -3,7 +3,13 @@ import { getOneTask, updateTask } from "../services/tasks";
 
 
 const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask }) => {
-  const [task, setTask] = useState<{name: string}>();
+  const [task, setTask] = useState<{name: string, description: string, deadline: string, fk_statusid:string, fk_priorityid:string}>({ 
+    name: "", 
+    description: "", 
+    deadline: "", 
+    fk_statusid: "", 
+    fk_priorityid: "" 
+  });
   const [formData, setFormData] = useState<TaskUpdate>({
     name: "",
     description: "",
@@ -17,9 +23,14 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask })
       (async () => {
         try {
           const task = await getOneTask(idTask) as any;
-          
+          console.log(task)
           setTask({
-            name: task.task.Título
+            name: task.name,
+            description: task.description,
+            deadline: task.deadline,
+            fk_priorityid: task.fk_priorityid,
+            fk_statusid: task.fk_statusid
+            
           })
         } catch (error) {
           console.log(error);
@@ -76,11 +87,11 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask })
                 </div>
                 <div className="form-group">
                   <label htmlFor="descripcion">Descripción:</label>
-                  <input onChange={handleChange} type="text" className="form-control" id="description" name="description" required placeholder="Ingresa una descripción de la tarea" />
+                  <input onChange={handleChange} value={task?.description} type="text" className="form-control" id="description" name="description" required placeholder="Ingresa una descripción de la tarea" />
                 </div>
                 <div className="form-group">
                   <label htmlFor="fecha">Fecha de vencimiento:</label>
-                  <input onChange={handleChange} type="datetime-local" className="form-control" id="fecha" name="deadline" required placeholder="Ingresa la fecha de vencimiento de la tarea" />
+                  <input onChange={handleChange} value={task!.deadline} type="datetime-local" className="form-control" id="fecha" name="deadline" required placeholder="Ingresa la fecha de vencimiento de la tarea" />
                 </div>
                 <div className="form-group">
                   <label htmlFor="estatus">Estatus:</label>
