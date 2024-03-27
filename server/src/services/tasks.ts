@@ -21,16 +21,34 @@ export const getTaskService = async (taskId: string | undefined, userId: string 
     return res;
 }
 
-export  const getTasksService = async (user_id: number | string) => {
-	const query = `SELECT tt.id, tt.name, tt.description, tt.deadline 
-    FROM TR_TASK tt
-    INNER JOIN TR_USER_TASK tut
-    INNER JOIN TR_USER tu
-    WHERE tt.id = tut.idTask 
-    AND tut.idUser = tu.id
-    AND tu.id=?;`
-    
+export const getTasksService = async (user_id: number | string) => {
+    const query = `SELECT 
+    tt.id as id,
+	tt.name as nombre,
+    tt.description as descripcion,
+    tt.deadline as fecha,
+    TCP.description as prioridad,
+    TCS.description as estatus
+		FROM TR_TASK tt
+		INNER JOIN TR_USER_TASK tut
+		INNER JOIN TR_USER tu
+        join TC_PRIORITY TCP ON tt.fk_priorityid = TCP.id
+		join TC_STATUS TCS ON TCS.id = tt.fk_statusid
+		WHERE tt.id = tut.idTask 
+		AND tut.idUser = tu.id
+		AND tu.id=?;`
+
     const tasks = await conn.query(query, user_id)
+    /*
+    interface Task {
+        id: number;
+        nombre: string;
+        descripcion: string;
+        fecha: string;
+        estatus: string;
+        prioridad: string;
+    }
+    */
 
     const bool = true
     const integer = 1
@@ -48,7 +66,7 @@ export  const getTasksService = async (user_id: number | string) => {
 
 export const createTaskService = async (userId: string | number, body: Task) => {
     // Crear la sentencia SQL con los parámetros adecuados
-    const insertTaskSQL = "INSERT INTO TR_TASK (fk_statusid, fk_priorityid, name, description, deadline) VALUES (?, ?, ?, ?, NOW())";
+    const insertTaskSQL = "INSERT INTO TR_TASK (fk_statusid, fk_priorityid, name, description, deadline) VALUES (?, ?, ?, ?, ?)";
     // Ejecutar la consulta SQL con los datos proporcionados
     const [rowsTask]: any = await conn.query(insertTaskSQL, [body.fk_statusid, body.fk_priorityid, body.name, body.description, body.deadline]);
 
@@ -74,31 +92,31 @@ export const createTaskService = async (userId: string | number, body: Task) => 
 
 export const updateTaskService = async (userId: number | string, taskId: string | undefined, task: Task) => {
     const query: string = "SELECT COUNT(*) AS count FROM TR_USER_TASK WHERE idUser = ? AND idTask = ?";
-    
+
     try {
-        const [rows]: any = await conn.query(query, [userId, taskId]);        
+        const [rows]: any = await conn.query(query, [userId, taskId]);
         const count: number = rows[0]?.count || 0;
-    
+
         // Verificar si la tarea existe en la base de datos
         if (count === 0) {
             // Si no existe la tarea, devolver un mensaje de error
             return false
         };
-    
+
     } catch (error) {
         return error;
     }
-    
+
     // Generar la consulta SQL 1para actualizar la tarea
     const updateSQL = "UPDATE TR_TASK SET fk_statusid=?, fk_priorityid=?, name=?, description=?, deadline=? WHERE id=?";
-    
+
     try {
         // Ejecutar la consulta SQL para actualizar la tarea
         await conn.execute(updateSQL, [task.fk_statusid, task.fk_priorityid, task.name, task.description, task.deadline, taskId]);
 
         // Respuesta al cliente indicando que la tarea ha sido actualizada exitosamente
         return true;
-    
+
     } catch (error) {
         // En caso de error, se asume que no existe el registro
         return error
@@ -106,7 +124,7 @@ export const updateTaskService = async (userId: number | string, taskId: string 
 }
 
 export const deleteTaskService = async (userId: number | string, taskId: string | undefined) => {
-    try{
+    try {
         // Generar la consulta SQL para verificar si la tarea existe
         const checkExistenceSQL = "SELECT COUNT(*) AS count FROM TR_USER_TASK WHERE idTask = ? AND idUser = ?";
 
@@ -140,9 +158,9 @@ export interface TaskUser {
 }
 
 export interface Task {
-	name: string;
-	description: string;
-	deadline: Date;
-	fk_statusid:number;
-	fk_priorityid: number;
+    name: string;
+    description: string;
+    deadline: Date;
+    fk_statusid: number;
+    fk_priorityid: number;
 }
