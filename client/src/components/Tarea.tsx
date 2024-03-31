@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ModalUpdate from "./ModalUpdate";
+import { deleteTask } from "../services/tasks";
 
 interface Task {
     id: number;
@@ -62,10 +63,10 @@ const Tarea: React.FC<Props> = ({ tasks }) => {
                         <td>{task.estatus}</td>
                         <td>{task.prioridad}</td>
                         <td>
-                            <button className="btn btn-primary"onClick={() => toggleFormulario(task.id)}>Actualizar</button>
+                            <button className="btn btn-primary" onClick={() => toggleFormulario(task.id)}>Actualizar</button>
                         </td>
                         <td>
-                            <button className="btn btn-danger">Eliminar</button>
+                            <button className="btn btn-danger" onClick={()=>{deleteTask(task.id)}}>Eliminar</button>
                         </td>
                     </tr>
                 ))}

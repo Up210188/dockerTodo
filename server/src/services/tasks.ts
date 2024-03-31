@@ -137,10 +137,12 @@ export const deleteTaskService = async (userId: number | string, taskId: string 
         }
 
         //Generar la consulta SQl para eliminar la tarea 
-        const deletSQL = "DELETE FROM TR_USER_TASK WHERE idTask=? AND idUser=?;";
+        const deletSQL_TUT = "DELETE FROM TR_USER_TASK WHERE idTask=? AND idUser=?;";
+        const deletSQL_TT = "DELETE FROM TR_TASK WHERE id=?;";
 
         // Ejecutar la consulta SQL para eliminar la tarea por su ID
-        await conn.execute(deletSQL, [taskId, userId]);
+        await conn.execute(deletSQL_TUT, [taskId, userId]);
+        await conn.execute(deletSQL_TT, [taskId]);
 
         return "Tarea eliminada."
     } catch (error) {

@@ -95,3 +95,21 @@ export const updateTask = async (idtask:number, taskData:TaskUpdate) => {
     estatus: string;
     prioridad: string;
   }
+
+export const deleteTask = async (idTask: number) => {
+  const TASK_URL = new URL(`task/${idTask}`, BASE_URL);
+
+  const resp = await fetch(TASK_URL, {
+    method: 'DELETE',
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${getToken()}`
+    }
+  });
+  // Verificar si la solicitud fue exitosa
+  if (resp.ok) {
+    console.log('Tarea borrada exitosamente.');
+  } else {
+    console.error('Error al borrar la tarea:', resp.statusText);
+  }
+}
