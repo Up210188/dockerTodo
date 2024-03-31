@@ -22,6 +22,7 @@ const Tarea: React.FC<Props> = ({ tasks }) => {
     const toggleFormulario = (idTask:number) => {
         setIdTask(idTask);
         setMostrarFormulario(!mostrarFormulario);
+
     };
     if (tasks.length === 0) {
         return (
@@ -39,7 +40,7 @@ const Tarea: React.FC<Props> = ({ tasks }) => {
     return (
         <>
         <div className={`modal-backdrop fade ${mostrarFormulario ? 'show' : ''}`} style={{ zIndex: mostrarFormulario ? 1030 : -1 }}></div>
-        <ModalUpdate idTask={idTask!} showModal={mostrarFormulario} onClose={onClose} />
+        <ModalUpdate idTask={idTask!} showModal={mostrarFormulario} onClose={onClose}/>
         <table className="table table-striped">
             <thead>
                 <tr>

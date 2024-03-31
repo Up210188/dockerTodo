@@ -31,7 +31,7 @@ function Register() {
       e.preventDefault();
       await register(user);
       navigate('/login')
-      console.log(user)
+      //console.log(user)
     } catch (error) {
 
     }

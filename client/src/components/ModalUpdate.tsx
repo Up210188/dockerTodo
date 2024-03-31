@@ -2,20 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getOneTask, updateTask } from "../services/tasks";
 
 const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask }) => {
-  const [task, setTask] = useState<{name: string, description: string, deadline: string, fk_statusid:string, fk_priorityid:string}>({ 
-    name: "", 
-    description: "", 
-    deadline: "", 
-    fk_statusid: "", 
-    fk_priorityid: "" 
-  });
-  const [formData, setFormData] = useState<TaskUpdate>({
-    name: "",
-    description: "",
-    deadline: "",
-    fk_statusid: "",
-    fk_priorityid: ""
-  });
+  const [task, setTask] = useState<TaskUpdate>();
 
   useEffect(() => {
     if (idTask) {
@@ -23,28 +10,26 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask })
         try {
           const task = await getOneTask(idTask) as any;
 
-          const date = new Date(task.task.deadline);
-
-          const formatedDate = `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}T${date.getHours()}:${date.getMinutes()}`
-          console.log(date.toISOString())
-          console.log(formatedDate)
+          const date = new Date(task.deadline);
+          const formatedDate = date.toISOString().slice(0,16);
 
           setTask({
-            name: task.task.Título,
-            description: task.task.Descripción,
+            name: task.name,
+            description: task.description,
             deadline: formatedDate,
-            fk_priorityid: task.task.Prioridad,
-            fk_statusid: task.task.Estado
+            fk_priorityid: parseInt(task.fk_priorityid),
+            fk_statusid: parseInt(task.fk_statusid)
           })
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       })()
     }
   }, [showModal])
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setTask(prevData => ({
       ...prevData,
       [name]: value
     }));
@@ -52,17 +37,19 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask })
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const date = new Date(formData.deadline)
+    const date = new Date(task!.deadline)
+    task!.deadline = date.toISOString().slice(0,16)
     try {
-      formData.deadline = date.toLocaleString()
-      await updateTask(idTask, formData); // Espera a que la tarea se cree antes de cerrar el modal
-      console.log(formData);
+      await updateTask(idTask, task!); // Espera a que la tarea se cree antes de cerrar el modal
     } catch (error) {
       console.error("Error al crear la tarea:", error);
     }
 
     onClose(); // Cierra el modal después de agregar la tarea
   }
+
+  if (!task)
+    return <div>Cargando...</div>
 
   return (
     <>
@@ -101,8 +88,8 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask })
                 </div>
                 <div className="form-group">
                   <label htmlFor="estatus">Estatus:</label>
-                  <select onChange={handleChange} defaultValue={task?.fk_statusid} className="form-select" id="estatus" name="fk_statusid">
-                    <option disabled selected value="">Selecciona un estatus</option>
+                  <select onChange={handleChange} defaultValue={task ? task.fk_statusid: "0"} className="form-select" id="estatus" name="fk_statusid">
+                    <option disabled value="0">Selecciona un estatus</option>
                     <option value="1">Completada</option>
                     <option value="2">En proceso</option>
                     <option value="3">Pendiente</option>
@@ -111,8 +98,8 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask })
                 </div>
                 <div className="form-group">
                   <label htmlFor="prioridad">Prioridad:</label>
-                  <select onChange={handleChange} defaultValue={task?.fk_priorityid} className="form-select" id="prioridad" name="fk_priorityid">
-                    <option disabled selected value="">Selecciona una prioridad</option>
+                  <select onChange={handleChange} defaultValue={task ? task.fk_priorityid: "0"} className="form-select" id="prioridad" name="fk_priorityid">
+                    <option disabled value="0">Selecciona una prioridad</option>
                     <option value="1">Altamente prioritaria</option>
                     <option value="2">Prioritaria</option>
                     <option value="3">Medianamente prioritaria</option>
@@ -140,26 +127,10 @@ interface ModalUpdateProps {
   idTask: number;
 }
 
-/* interface Task {
-  id: number;
-  nombre: string;
-  descripcion: string;
-  fecha: string;
-  estatus: string;
-  prioridad: string;
-} */
 export interface TaskUpdate {
-  name: string;
-  description: string;
-  deadline: string;
-  fk_statusid: string;
-  fk_priorityid: string;
+  name?: string;
+  description?: string;
+  deadline?: any;
+  fk_statusid?: number | string;
+  fk_priorityid?: number | string;
 }
-
-/* const tarea={
-  name:"comer hamburguesa",
-  description:"mañana tengo que comer",
-  deadline:"2024-02-12", 
-  fk_statusid:"1", 
-  fk_priorityid:"2"
-} */

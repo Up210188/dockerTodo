@@ -20,7 +20,6 @@ const ModalInsert: React.FC<ModalInsertProps> = ({ showModal, onClose, onTaskCre
   
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData)
     try {
       await createTask(formData); // Espera a que la tarea se cree antes de cerrar el modal
       onTaskCreated(); // Llama al callback para notificar que se creó una tarea
@@ -63,7 +62,7 @@ const ModalInsert: React.FC<ModalInsertProps> = ({ showModal, onClose, onTaskCre
                 <div className="form-group">
                   <label htmlFor="estatus">Estatus:</label>
                   <select onChange={handleChange} className="form-select" id="estatus" name="fk_statusid">
-                    <option disabled selected value="">Selecciona un estatus</option>
+                    <option disabled value="0">Selecciona un estatus</option>
                     <option value="1">Completada</option>
                     <option value="2">En proceso</option>
                     <option value="3">Pendiente</option>
@@ -73,11 +72,11 @@ const ModalInsert: React.FC<ModalInsertProps> = ({ showModal, onClose, onTaskCre
                 <div className="form-group">
                   <label htmlFor="prioridad">Prioridad:</label>
                   <select onChange={handleChange} className="form-select" id="prioridad" name="fk_priorityid">
-                    <option disabled selected value="">Selecciona una prioridad</option>
-                    <option value="2">Altamente prioritaria</option>
-                    <option value="3">Prioritaria</option>
-                    <option value="4">Medianamente prioritaria</option>
-                    <option value="5">No prioritaria</option>
+                    <option disabled value="0">Selecciona una prioridad</option>
+                    <option value="1">Altamente prioritaria</option>
+                    <option value="2">Prioritaria</option>
+                    <option value="3">Medianamente prioritaria</option>
+                    <option value="4">No prioritaria</option>
                   </select>
                 </div>
                 <div className="d-flex justify-content-end">

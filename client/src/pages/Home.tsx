@@ -15,7 +15,6 @@ const Home: React.FC = () => {
     const fetchData = async () => {
       try {
         const tasks = await getAllTasks(); // Llama a la función getAllTasks para obtener los datos
-        console.log(tasks)
         setTasks(tasks)
         //setTasks(tasksData); // Establece los datos obtenidos del servidor en el estado local
       } catch (error) {
@@ -28,7 +27,6 @@ const Home: React.FC = () => {
   
   const toggleFormulario = (): void => {
     setMostrarFormulario(!mostrarFormulario);
-    console.log(`Esto es desde el home ${seCreo}`)
     if (seCreo) {
       setMostrarAlertaInsert("");
     }
@@ -37,8 +35,7 @@ const Home: React.FC = () => {
   const handleTaskCreated = (): void => {
     setMostrarAlertaInsert(""); // Muestra la alerta después de crear la tarea
   };
-  
-  
+
   return (
     <>
       {/* Fondo oscurecido */}
@@ -58,7 +55,7 @@ const Home: React.FC = () => {
           <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
           <strong>Correcto!!</strong> Tarea agregada con éxito.<a href="#" className="alert-link"></a>
         </div>
-        <Tarea tasks={tasks} />
+        <Tarea tasks={tasks}/>
       </div>
     </>
   );
