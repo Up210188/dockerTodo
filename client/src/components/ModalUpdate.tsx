@@ -17,16 +17,20 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask })
             name: task.name,
             description: task.description,
             deadline: formatedDate,
-            fk_priorityid: parseInt(task.fk_priorityid),
-            fk_statusid: parseInt(task.fk_statusid)
+            fk_priorityid: task.fk_priorityid,
+            fk_statusid: task.fk_statusid
           })
         } catch (error) {
           console.error(error);
         }
       })()
     }
-  }, [showModal])
 
+    return () => {
+      setTask(undefined)
+    }
+  }, [showModal])
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const { name, value } = e.target;
     setTask(prevData => ({
@@ -48,8 +52,7 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask })
     onClose(); // Cierra el modal después de agregar la tarea
   }
 
-  if (!task)
-    return <div>Cargando...</div>
+  if (!task) return;
 
   return (
     <>

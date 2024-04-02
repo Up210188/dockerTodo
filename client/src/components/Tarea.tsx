@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ModalUpdate from "./ModalUpdate";
-import { deleteTask } from "../services/tasks";
 
 interface Task {
     id: number;
@@ -13,9 +12,10 @@ interface Task {
 
 interface Props {
     tasks: Task[];
+    deleteTask: (idTask: number) => void;
 }
 
-const Tarea: React.FC<Props> = ({ tasks }) => {
+const Tarea: React.FC<Props> = ({ tasks, deleteTask }) => {
     
     const [mostrarFormulario, setMostrarFormulario] = useState<boolean>(false);
     const [idTask,setIdTask]=useState<number>()
@@ -37,6 +37,8 @@ const Tarea: React.FC<Props> = ({ tasks }) => {
         setMostrarFormulario(false);
         setIdTask(undefined);
     }
+
+    
 
     return (
         <>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ModalInsert from "../components/ModalInsert";
 import Tarea from "../components/Tarea";
 //import { tasks as data } from "../task";
-import { getAllTasks } from "../services/tasks";
+import { getAllTasks, deleteTask } from "../services/tasks";
 
 
 const Home: React.FC = () => {
@@ -12,18 +12,19 @@ const Home: React.FC = () => {
   let seCreo: boolean = false;
   
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const tasks = await getAllTasks(); // Llama a la función getAllTasks para obtener los datos
-        setTasks(tasks)
-        //setTasks(tasksData); // Establece los datos obtenidos del servidor en el estado local
-      } catch (error) {
-        console.error('Error al obtener las tareas:', error);
-      }
-    };
-    fetchData();
+    fetchAllTask();
     //setTasks(data);
   }, [mostrarFormulario]);
+
+  const fetchAllTask = async () => {
+    try {
+      const tasks = await getAllTasks(); // Llama a la función getAllTasks para obtener los datos
+      setTasks(tasks)
+      //setTasks(tasksData); // Establece los datos obtenidos del servidor en el estado local
+    } catch (error) {
+      console.error('Error al obtener las tareas:', error);
+    }
+  };
   
   const toggleFormulario = (): void => {
     setMostrarFormulario(!mostrarFormulario);
@@ -35,6 +36,16 @@ const Home: React.FC = () => {
   const handleTaskCreated = (): void => {
     setMostrarAlertaInsert(""); // Muestra la alerta después de crear la tarea
   };
+
+  const deleteTaskForm = async (idTask: number) => {
+    const conf = confirm("estas seguro????")
+
+
+    if (conf) {
+      await deleteTask(idTask);
+      await fetchAllTask();
+    }
+  }
 
   return (
     <>
@@ -55,7 +66,7 @@ const Home: React.FC = () => {
           <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
           <strong>Correcto!!</strong> Tarea agregada con éxito.<a href="#" className="alert-link"></a>
         </div>
-        <Tarea tasks={tasks}/>
+        <Tarea tasks={tasks} deleteTask={deleteTaskForm}/>
       </div>
     </>
   );
