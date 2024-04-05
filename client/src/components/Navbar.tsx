@@ -1,5 +1,9 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faUser, faPenToSquare, faRightToBracket, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+//<FontAwesomeIcon icon="fa-solid fa-right-to-bracket" />
+
 
 function Navbar() {
   const { isAuth } = useAuth();
@@ -13,7 +17,7 @@ function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
       <div className="container-fluid">
-        <a className="navbar-brand" href="#">ToDo APP</a>
+        <a className="navbar-brand" href="#">ToDo App</a>
         <button name='toggle'
           className="navbar-toggler collapsed"
           type="button" data-bs-toggle="collapse"
@@ -29,12 +33,12 @@ function Navbar() {
               isAuth && (
                 <>
                   <li className="nav-item">
-                    <NavLink to="/" className="nav-link" >Inicio
+                    <NavLink to="/" className="nav-link" ><FontAwesomeIcon icon={faHome} /> Inicio
                       <span className="visually-hidden">(current)</span>
                     </NavLink>
                   </li>
                   <li className="nav-item" style={{ cursor: "pointer" }} onClick={logout}>
-                    <span className="nav-link">Logout</span>
+                    <span className="nav-link"><FontAwesomeIcon icon={faRightFromBracket} /> Logout </span>
                   </li>
                 </>
               )
@@ -42,20 +46,29 @@ function Navbar() {
             {
               !isAuth && (
                 <>
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
                     <NavLink to="/register" className="nav-link">Registro</NavLink>
                   </li>
                   <li className="nav-item">
                     <NavLink to="/login" className="nav-link">Login</NavLink>
+                  </li> */}
+                  <li className="nav-item dropdown">
+                    <a 
+                      className="nav-link dropdown-toggle" 
+                      data-bs-toggle="dropdown" href="#" 
+                      role="button" aria-haspopup="true" 
+                      aria-expanded="true">
+                        User <FontAwesomeIcon icon={faUser} />
+                    </a>
+                    <div className="dropdown-menu " data-bs-popper="static">
+                      <NavLink to="/login" className="nav-link">Login <FontAwesomeIcon icon={faRightToBracket} /></NavLink>
+                      <NavLink to="/register" className="nav-link">Registro <FontAwesomeIcon icon={faPenToSquare} /></NavLink>
+                    </div>
                   </li>
                 </>
               )
             }
           </ul>
-          <form className="d-flex">
-            <input className="form-control me-sm-2" type="search" placeholder="Buscar tarea" />
-            <button className="btn btn-secondary my-2 my-sm-0" type="submit">Buscar</button>
-          </form>
         </div>
       </div>
     </nav>

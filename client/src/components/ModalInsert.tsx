@@ -21,6 +21,7 @@ const ModalInsert: React.FC<ModalInsertProps> = ({ showModal, onClose, onTaskCre
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      console.log(formData)
       await createTask(formData); // Espera a que la tarea se cree antes de cerrar el modal
       onTaskCreated(); // Llama al callback para notificar que se creó una tarea
     } catch (error) {
@@ -49,19 +50,19 @@ const ModalInsert: React.FC<ModalInsertProps> = ({ showModal, onClose, onTaskCre
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label htmlFor="nombre">Nombre:</label>
-                  <input onChange={handleChange} type="text" className="form-control" id="nombre" name="name" required placeholder="Ingresa el nombre de la tarea" />
+                  <input onChange={handleChange} type="text" className="form-control" id="nombre" name="name" required placeholder="Ingresa el nombre de la tarea" defaultValue={""}/>
                 </div>
                 <div className="form-group">
                   <label htmlFor="descripcion">Descripción:</label>
-                  <input onChange={handleChange} type="text" className="form-control" id="descripcion" name="description" required placeholder="Ingresa una descripción de la tarea" />
+                  <input onChange={handleChange} type="text" className="form-control" id="descripcion" name="description" required placeholder="Ingresa una descripción de la tarea" defaultValue={""} />
                 </div>
                 <div className="form-group">
                   <label htmlFor="fecha">Fecha de vencimiento:</label>
-                  <input onChange={handleChange} type="datetime-local" className="form-control" id="fecha" name="deadline" required placeholder="Ingresa la fecha de vencimiento de la tarea" />
+                  <input onChange={handleChange} type="datetime-local" className="form-control" id="fecha" name="deadline" required placeholder="Ingresa la fecha de vencimiento de la tarea" defaultValue={""}/>
                 </div>
                 <div className="form-group">
                   <label htmlFor="estatus">Estatus:</label>
-                  <select onChange={handleChange} className="form-select" id="estatus" name="fk_statusid">
+                  <select onChange={handleChange} className="form-select" id="estatus" name="fk_statusid" defaultValue={"0"}>
                     <option disabled value="0">Selecciona un estatus</option>
                     <option value="1">Completada</option>
                     <option value="2">En proceso</option>
@@ -71,7 +72,7 @@ const ModalInsert: React.FC<ModalInsertProps> = ({ showModal, onClose, onTaskCre
                 </div>
                 <div className="form-group">
                   <label htmlFor="prioridad">Prioridad:</label>
-                  <select onChange={handleChange} className="form-select" id="prioridad" name="fk_priorityid">
+                  <select onChange={handleChange} className="form-select" id="prioridad" name="fk_priorityid" defaultValue={"0"}>
                     <option disabled value="0">Selecciona una prioridad</option>
                     <option value="1">Altamente prioritaria</option>
                     <option value="2">Prioritaria</option>

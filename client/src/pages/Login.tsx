@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [userLogin, setUserLogin] = useState<UserLogin>({});
+  const [mostrarAlertaError, setMostrarAlertaError] = useState<string>("d-none");
   const navigate = useNavigate();
 
   const handleInputChange = (e: FormEvent<HTMLInputElement>) => {
@@ -23,6 +24,7 @@ function Login() {
       setToken(token);
       navigate('/');
     } catch (error) {
+      setMostrarAlertaError("");
       console.error(error)
     }
   }
@@ -51,8 +53,10 @@ function Login() {
                 name="password"
                 onInput={handleInputChange} />
             </div>
+            <div className={`alert alert-danger ${mostrarAlertaError}`}><strong>Ups..</strong> usuario o contraseña incorrectos</div>
             <div className="row justify-content-center">
               <button type="submit" className="btn btn-primary btn-block">Iniciar sesión</button>
+              <small id="emailHelp" className="form-text text-muted">¿No tienes una cuenta? <a href="/register">Registrate</a></small>
             </div>
           </form>
         </div>

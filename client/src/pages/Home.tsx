@@ -2,14 +2,18 @@ import React, { useState, useEffect } from "react";
 import ModalInsert from "../components/ModalInsert";
 import Tarea from "../components/Tarea";
 //import { tasks as data } from "../task";
-import { getAllTasks, deleteTask } from "../services/tasks";
+import { getAllTasks, deleteTask, updateTask } from "../services/tasks";
+import { TaskUpdate, formatDateISOString } from "../components/ModalUpdate";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faPlus} from '@fortawesome/free-solid-svg-icons';
+
 
 
 const Home: React.FC = () => {
-  const [mostrarAlertaInsert, setMostrarAlertaInsert] = useState<string>("d-none");
+  const [mostrarAlertaCambios, setMostrarAlertaCambios] = useState<string>("d-none");
+  const [textoAlerta,setTextoAlerta] = useState<string>("Tarea agregada con éxito.")
   const [mostrarFormulario, setMostrarFormulario] = useState<boolean>(false);
   const [tasks, setTasks] = useState<Task[]>([]);
-  let seCreo: boolean = false;
   
   useEffect(() => {
     fetchAllTask();
@@ -28,22 +32,38 @@ const Home: React.FC = () => {
   
   const toggleFormulario = (): void => {
     setMostrarFormulario(!mostrarFormulario);
-    if (seCreo) {
-      setMostrarAlertaInsert("");
-    }
+    
   };
 
   const handleTaskCreated = (): void => {
-    setMostrarAlertaInsert(""); // Muestra la alerta después de crear la tarea
+    setTextoAlerta("Tarea agregada con éxito.");
+    setMostrarAlertaCambios(""); // Muestra la alerta después de crear la tarea
   };
 
   const deleteTaskForm = async (idTask: number) => {
-    const conf = confirm("estas seguro????")
+    const conf = confirm("Seguro que desea borrar la tarea?")
 
 
     if (conf) {
       await deleteTask(idTask);
       await fetchAllTask();
+      setTextoAlerta("Se ha eliminado la tarea.");
+      setMostrarAlertaCambios("");
+    }
+  }
+
+  const updateTaskForm = async (idTask: number, task:TaskUpdate) => {
+    console.log(`Se actualizará la tarea con el id:${idTask}`)
+    console.log(task)
+    const date = new Date(task!.deadline)
+    task!.deadline = formatDateISOString(date)
+    try {
+      await updateTask(idTask, task!); // Espera a que la tarea se cree antes de cerrar el modal
+      await fetchAllTask(); //Actualizar pantalla
+      setTextoAlerta(`Se ha modificado la tarea: ${task.name}.`);
+      setMostrarAlertaCambios("");
+    } catch (error) {
+      console.error("Error al crear la tarea:", error);
     }
   }
 
@@ -57,16 +77,16 @@ const Home: React.FC = () => {
           <h1 className="text-center">Lista de tareas</h1>
           <div>
             <ModalInsert showModal={mostrarFormulario} onClose={toggleFormulario} onTaskCreated={handleTaskCreated}/>
-            <button className="btn btn-primary ms-3" onClick={toggleFormulario}>Agregar una nueva tarea</button>
+            <button className="btn btn-primary ms-3" onClick={toggleFormulario}><FontAwesomeIcon icon={faPlus} /> Agregar tarea </button>
           </div>
         </div>
       </div>
       <div className="container">
-        <div className={`alert alert-dismissible alert-success ${mostrarAlertaInsert}`}>
-          <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
-          <strong>Correcto!!</strong> Tarea agregada con éxito.<a href="#" className="alert-link"></a>
+        <div className={`alert alert-dismissible alert-success ${mostrarAlertaCambios}`}>
+          <button type="button" className="btn-close" onClick={()=>{setMostrarAlertaCambios("d-none")}}></button>
+          <strong>Correcto!!</strong> {textoAlerta}
         </div>
-        <Tarea tasks={tasks} deleteTask={deleteTaskForm}/>
+        <Tarea tasks={tasks} deleteTask={deleteTaskForm} updateTaskForm={updateTaskForm}/>
       </div>
     </>
   );

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ModalUpdate from "./ModalUpdate";
+import ModalUpdate, { TaskUpdate } from "./ModalUpdate";
 
 interface Task {
     id: number;
@@ -13,9 +13,10 @@ interface Task {
 interface Props {
     tasks: Task[];
     deleteTask: (idTask: number) => void;
+    updateTaskForm: (idTask: number,task:TaskUpdate) => void;
 }
 
-const Tarea: React.FC<Props> = ({ tasks, deleteTask }) => {
+const Tarea: React.FC<Props> = ({ tasks, deleteTask, updateTaskForm}) => {
     
     const [mostrarFormulario, setMostrarFormulario] = useState<boolean>(false);
     const [idTask,setIdTask]=useState<number>()
@@ -43,7 +44,7 @@ const Tarea: React.FC<Props> = ({ tasks, deleteTask }) => {
     return (
         <>
         <div className={`modal-backdrop fade ${mostrarFormulario ? 'show' : ''}`} style={{ zIndex: mostrarFormulario ? 1030 : -1 }}></div>
-        <ModalUpdate idTask={idTask!} showModal={mostrarFormulario} onClose={onClose}/>
+        <ModalUpdate idTask={idTask!} showModal={mostrarFormulario} onClose={onClose} updateTaskForm={updateTaskForm}/>
         <table className="table table-striped">
             <thead>
                 <tr>

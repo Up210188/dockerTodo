@@ -110,6 +110,8 @@ function Register() {
             </div>
             <div className="row justify-content-center">
               <button type="submit" className="btn btn-primary btn-block">Registrarse</button>
+              
+              <small id="emailHelp" className="form-text text-muted">¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></small>
             </div>
           </form>
         </div>
