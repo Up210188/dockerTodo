@@ -10,6 +10,7 @@ function Register() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<string>("password");
   const [showPassword2, setShowPassword2] = useState<string>("password");
+  const [allDataAlert, setAlldataAlert] = useState<boolean>(false);
   //const [name, setName] = useState<string>();
 
 
@@ -37,22 +38,27 @@ function Register() {
     }
   }
   const handleSumbitInput = async (e: FormEvent<HTMLFormElement>) => {
+    if (user.birthday && user.email && user.name && user.password && user.username) {
 
-    try {
-      e.preventDefault();
-      await register(user);
-      navigate('/login')
-      //console.log(user)
-    } catch (error) {
+      try {
+        e.preventDefault();
+        await register(user);
+        navigate('/login')
+        //console.log(user)
+      } catch (error) {
 
+      }
+    }
+    else {
+      setAlldataAlert(true)
     }
   }
   const togglePasswordVisibility = () => {
-    setShowPassword(showPassword == "password" ? "text":"password")
+    setShowPassword(showPassword == "password" ? "text" : "password")
 
   };
   const togglePasswordVisibility2 = () => {
-    setShowPassword2(showPassword2 == "password" ? "text":"password")
+    setShowPassword2(showPassword2 == "password" ? "text" : "password")
   };
 
 
@@ -66,6 +72,10 @@ function Register() {
         <div className="col-sm-4">
           <h2 className="mb-4">Registro</h2>
           <form className="mb-3" onSubmit={handleSumbitInput}>
+            <div className={`alert alert-danger ${!allDataAlert ? "d-none" : "d-block"}`}>
+              <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
+              <strong>Oh snap!</strong> <a href="#" className="alert-link">Change a few things up</a> and try submitting again.
+            </div>
             <div className="mb-3">
               <label htmlFor="name" className="form-label">Nombre Completo</label>
               <input
@@ -101,15 +111,6 @@ function Register() {
                 id="birthday"
                 name="birthday"
                 onInput={handleInputChange} />
-            </div>
-            <div className="mb-3">
-              {/* <input
-                type={showPassword}
-                className="form-control"
-                id="password"
-                name="password"
-                onInput={handleInputChange} />
-              <FontAwesomeIcon icon={faEyeSlash} /> */}
             </div>
             <label htmlFor="password" className="form-label">Contraseña</label>
             <div className="input-group mb-3">
