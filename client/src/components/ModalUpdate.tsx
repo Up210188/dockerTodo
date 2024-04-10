@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { getOneTask, updateTask } from "../services/tasks";
+import { getOneTask} from "../services/tasks";
 
-const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask }) => {
+const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask, updateTaskForm }) => {
   const [task, setTask] = useState<TaskUpdate>();
 
   useEffect(() => {
@@ -11,8 +11,11 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask })
           const task = await getOneTask(idTask) as any;
 
           const date = new Date(task.deadline);
-          const formatedDate = date.toISOString().slice(0,16);
-
+          console.log(date)
+          //console.log(`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}T${date.getHours()}:${date.getMinutes()}`)
+          //const formatedDate = date.toISOString().slice(0, 16);
+          const formatedDate = formatDateISOString(date);
+          console.log(formatedDate)
           setTask({
             name: task.name,
             description: task.description,
@@ -30,7 +33,7 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask })
       setTask(undefined)
     }
   }, [showModal])
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const { name, value } = e.target;
     setTask(prevData => ({
@@ -39,19 +42,7 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask })
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const date = new Date(task!.deadline)
-    task!.deadline = date.toISOString().slice(0,16)
-    try {
-      await updateTask(idTask, task!); // Espera a que la tarea se cree antes de cerrar el modal
-    } catch (error) {
-      console.error("Error al crear la tarea:", error);
-    }
-
-    onClose(); // Cierra el modal después de agregar la tarea
-  }
-
+  
   if (!task) return;
 
   return (
@@ -76,7 +67,7 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask })
               </button>
             </div>
             <div className="modal-body">
-              <form onSubmit={handleSubmit}>
+              <form>
                 <div className="form-group">
                   <label htmlFor="nombre">Nombre:</label>
                   <input onChange={handleChange} defaultValue={task?.name} type="text" className="form-control" id="nombre" name="name" required placeholder="Ingresa el nombre de la tarea" />
@@ -91,7 +82,7 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask })
                 </div>
                 <div className="form-group">
                   <label htmlFor="estatus">Estatus:</label>
-                  <select onChange={handleChange} defaultValue={task ? task.fk_statusid: "0"} className="form-select" id="estatus" name="fk_statusid">
+                  <select onChange={handleChange} defaultValue={task ? task.fk_statusid : "0"} className="form-select" id="estatus" name="fk_statusid">
                     <option disabled value="0">Selecciona un estatus</option>
                     <option value="1">Completada</option>
                     <option value="2">En proceso</option>
@@ -101,7 +92,7 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask })
                 </div>
                 <div className="form-group">
                   <label htmlFor="prioridad">Prioridad:</label>
-                  <select onChange={handleChange} defaultValue={task ? task.fk_priorityid: "0"} className="form-select" id="prioridad" name="fk_priorityid">
+                  <select onChange={handleChange} defaultValue={task ? task.fk_priorityid : "0"} className="form-select" id="prioridad" name="fk_priorityid">
                     <option disabled value="0">Selecciona una prioridad</option>
                     <option value="1">Altamente prioritaria</option>
                     <option value="2">Prioritaria</option>
@@ -111,7 +102,7 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask })
                 </div>
                 <div className="d-flex justify-content-end">
                   <button type="button" className="btn btn-primary me-2" onClick={onClose}>Cerrar</button>
-                  <button type="submit" className="btn btn-secondary">Actualizar</button>
+                  <button type="button" className="btn btn-secondary" onClick={()=>{updateTaskForm(idTask,task); onClose();}}>Actualizar</button>
                 </div>
               </form>
             </div>
@@ -121,13 +112,26 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask })
     </>
   );
 };
+export const formatDateISOString = (date: Date): string => {
+  // Extraer los componentes de la fecha y hora
+  var año = date.getFullYear();
+  var mes = ('0' + (date.getMonth() + 1)).slice(-2); // Los meses comienzan desde 0, por eso se suma 1
+  var día = ('0' + date.getDate()).slice(-2);
+  var hora = ('0' + date.getHours()).slice(-2);
+  var minuto = ('0' + date.getMinutes()).slice(-2);
 
+  // Construir la cadena de fecha y hora manualmente
+  var cadenaFechaHora = año + '-' + mes + '-' + día + 'T' + hora + ':' + minuto;
+
+ return(cadenaFechaHora); // Salida: "2024-04-03T17:40"
+};
 export default ModalUpdate;
 
 interface ModalUpdateProps {
   showModal: boolean;
   onClose: () => void;
   idTask: number;
+  updateTaskForm: (idTask: number,task:TaskUpdate) => void;
 }
 
 export interface TaskUpdate {

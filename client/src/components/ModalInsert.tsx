@@ -47,15 +47,15 @@ const ModalInsert: React.FC<ModalInsertProps> = ({ showModal, onClose, onTaskCre
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label htmlFor="nombre">Nombre:</label>
-                  <input onChange={handleChange} type="text" className="form-control" id="nombre" name="name" required placeholder="Ingresa el nombre de la tarea" />
+                  <input onChange={handleChange} type="text" className="form-control" id="nombre" name="name" required placeholder="Ingresa el nombre de la tarea" defaultValue={""}/>
                 </div>
                 <div className="form-group">
                   <label htmlFor="descripcion">Descripción:</label>
-                  <input onChange={handleChange} type="text" className="form-control" id="descripcion" name="description" required placeholder="Ingresa una descripción de la tarea" />
+                  <input onChange={handleChange} type="text" className="form-control" id="descripcion" name="description" required placeholder="Ingresa una descripción de la tarea" defaultValue={""} />
                 </div>
                 <div className="form-group">
                   <label htmlFor="fecha">Fecha de vencimiento:</label>
-                  <input onChange={handleChange} type="datetime-local" className="form-control" id="fecha" name="deadline" required placeholder="Ingresa la fecha de vencimiento de la tarea" />
+                  <input onChange={handleChange} type="datetime-local" className="form-control" id="fecha" name="deadline" required placeholder="Ingresa la fecha de vencimiento de la tarea" defaultValue={""}/>
                 </div>
                 <div className="form-group">
                   <label htmlFor="estatus">Estatus:</label>
