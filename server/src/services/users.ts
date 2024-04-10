@@ -30,26 +30,12 @@ export const getUsersService = async () => {
 };
 
 export const updateUserService = async (userId: number | string, user: UpdateUser) => {
-    const query: string = "SELECT COUNT(*) AS count FROM TR_USER WHERE id = ?";
-
-    try {
-        const [rows]: any = await conn.query(query, [userId]);
-        const count: number = rows[0]?.count || 0;
-
-        if (count === 0) {
-            return false
-        };
-
-    } catch (error) {
-        return error;
-    }
-
     // Generar la consulta SQL 1para actualizar la tarea
-    const completeUpdateSQL = `UPDATE TR_USER SET name, username, password, birthday
-    VALUES (?,?,?,?) WHERE id=?;`;
-
-    const partialUpdateSQL = `UPDATE TR_USER SET name, username, birthday
+    const completeUpdateSQL = `UPDATE TR_USER SET name=?, username=?, password=?, birthday=?
     VALUES (?,?,?) WHERE id=?;`;
+
+    const partialUpdateSQL = `UPDATE TR_USER SET name=?, username=?, birthday=?
+    WHERE id=?;`;
 
     try {
         if (!user.password)
@@ -94,8 +80,8 @@ export interface CreateUser {
 }
 
 export interface UpdateUser {
-    name: string;
-    username: string;
-    password: string;
-    birthday: Date;
+    name: string | null;
+    username: string | null;
+    password?: string | null;
+    birthday: Date | null;
 }
