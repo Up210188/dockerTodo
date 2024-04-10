@@ -45,11 +45,16 @@ export const updateUserService = async (userId: number | string, user: UpdateUse
     }
 
     // Generar la consulta SQL 1para actualizar la tarea
-    const updateSQL = `UPDATE TR_USER SET name, username, password, birthday
+    const completeUpdateSQL = `UPDATE TR_USER SET name, username, password, birthday
     VALUES (?,?,?,?) WHERE id=?;`;
 
+    const partialUpdateSQL = `UPDATE TR_USER SET name, username, birthday
+    VALUES (?,?,?) WHERE id=?;`;
+
     try {
-        await conn.execute(updateSQL, [user.name, user.username, user.password, user.birthday, userId]);
+        if (!user.password)
+            await conn.execute(partialUpdateSQL, [user.name, user.username, user.birthday, userId]);
+        await conn.execute(completeUpdateSQL, [user.name, user.username, user.password, user.birthday, userId]);
 
         return true;
 

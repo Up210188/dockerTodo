@@ -3,6 +3,7 @@ import { getOneUser } from "../services/users";
 
 const ModalUserUpdate: React.FC<ModalUserUpdateProps> = ({ showModal, onClose, updateUserForm }) => {
   const [user, setUser] = useState<UserUpdate>();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   useEffect(() => {
     (async ()=> {
@@ -12,11 +13,13 @@ const ModalUserUpdate: React.FC<ModalUserUpdateProps> = ({ showModal, onClose, u
 
             if (!user)
                 return;
-            const birthday = new Date(user?.birthday!)
+            const birthday = new Date(user.birthday!)
             const formatedDate = formatDateISOString(new Date(birthday))
             setUser({
-                birthday: formatedDate
-            })
+                name: user.name,
+                birthday: formatedDate,
+                username: user.username
+              })
         } catch (error) {
             console.error(error)
         }
@@ -62,19 +65,21 @@ const ModalUserUpdate: React.FC<ModalUserUpdateProps> = ({ showModal, onClose, u
               <form>
                 <div className="form-group">
                   <label htmlFor="name">Nombre:</label>
-                  <input onChange={handleChange} defaultValue={user?.name} type="text" className="form-control" id="name" name="name" required placeholder="Ingresa tu nombre completo" />
+                  <input onChange={handleChange} defaultValue={user.name} type="text" className="form-control" id="name" name="name" required placeholder="Ingresa tu nombre completo" />
                 </div>
                 <div className="form-group">
                   <label htmlFor="username">Usuario:</label>
-                  <input onChange={handleChange} defaultValue={user?.username} type="text" className="form-control" id="username" name="username" required placeholder="Ingresa el username nuevo" />
+                  <input onChange={handleChange} defaultValue={user.username} type="text" className="form-control" id="username" name="username" required placeholder="Ingresa el username nuevo" />
                 </div>
                 <div className="form-group">
                   <label htmlFor="password">Contraseña:</label>
-                  <input onChange={handleChange} defaultValue={user?.password} type="password" className="form-control" id="password" name="password" required placeholder="Ingresa una contraseña nueva" />
+                  <div>
+                    <input onChange={handleChange} type={ showPassword ? `text` : `password` } className="form-control" id="password" name="password" required placeholder="Ingresa una contraseña nueva" />
+                  </div>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="birthday">:</label>
-                  <input onChange={handleChange} defaultValue={user?.birthday?.toString()} type="datetime-local" className="form-control" id="birthday" name="birthday" required placeholder="Ingresa tu fecha de nacimiento" />
+                  <label htmlFor="birthday">Fecha de nacimiento:</label>
+                  <input onChange={handleChange} defaultValue={user.birthday?.toString()} type="datetime-local" className="form-control" id="birthday" name="birthday" required placeholder="Ingresa tu fecha de nacimiento" />
                 </div>
                 
                 <div className="d-flex justify-content-end">
