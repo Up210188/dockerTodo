@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faPenToSquare, faRightToBracket, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faPenToSquare, faRightToBracket, faRightFromBracket, faHome, faUserPen } from '@fortawesome/free-solid-svg-icons';
 //<FontAwesomeIcon icon="fa-solid fa-right-to-bracket" />
 
 
@@ -33,17 +33,17 @@ function Navbar() {
               isAuth && (
                 <>
                   <li className="nav-item">
-                    <NavLink to="/" className="nav-link" style={{ cursor: "pointer" }} >Inicio
+                    <NavLink to="/" className="nav-link" style={{ cursor: "pointer" }} ><FontAwesomeIcon icon={faHome} /> Inicio
+                      <span className="visually-hidden">(current)</span>
+                    </NavLink>
+                  </li>
+                  <li className="nav-item" style={{ cursor: "pointer" }} >
+                    <NavLink to='/user' className='nav-link'><FontAwesomeIcon icon={faUserPen}/> User
                       <span className="visually-hidden">(current)</span>
                     </NavLink>
                   </li>
                   <li className="nav-item" style={{ cursor: "pointer" }} onClick={logout}>
                     <span className="nav-link"><FontAwesomeIcon icon={faRightFromBracket} /> Logout </span>
-                  </li>
-                  <li className="nav-item" style={{ cursor: "pointer" }} >
-                    <NavLink to='/user' className='nav-link'>User
-                      <span className="visually-hidden">(current)</span>
-                    </NavLink>
                   </li>
                 </>
               )
