@@ -29,12 +29,17 @@ function Navbar() {
               isAuth && (
                 <>
                   <li className="nav-item">
-                    <NavLink to="/" className="nav-link" >Inicio
+                    <NavLink to="/" className="nav-link" style={{ cursor: "pointer" }} >Inicio
                       <span className="visually-hidden">(current)</span>
                     </NavLink>
                   </li>
                   <li className="nav-item" style={{ cursor: "pointer" }} onClick={logout}>
                     <span className="nav-link">Logout</span>
+                  </li>
+                  <li className="nav-item" style={{ cursor: "pointer" }} >
+                    <NavLink to='/user' className='nav-link'>User
+                      <span className="visually-hidden">(current)</span>
+                    </NavLink>
                   </li>
                 </>
               )
