@@ -20,7 +20,10 @@ const ModalUserUpdate: React.FC<ModalUserUpdateProps> = ({ showModal, onClose, u
         } catch (error) {
             console.error(error)
         }
-    })
+    })()
+    return ()=> {
+      setUser(undefined)
+    }
   }, [showModal])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
@@ -50,7 +53,7 @@ const ModalUserUpdate: React.FC<ModalUserUpdateProps> = ({ showModal, onClose, u
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header d-flex justify-content-between">
-              <h5 className="modal-title">Actualizar tarea</h5>
+              <h5 className="modal-title">Actualizar Usuario</h5>
               <button type="button" className="close" onClick={onClose}>
                 <span>&times;</span>
               </button>
@@ -58,20 +61,20 @@ const ModalUserUpdate: React.FC<ModalUserUpdateProps> = ({ showModal, onClose, u
             <div className="modal-body">
               <form>
                 <div className="form-group">
-                  <label htmlFor="nombre">Nombre:</label>
-                  <input onChange={handleChange} defaultValue={user?.name} type="text" className="form-control" id="nombre" name="name" required placeholder="Ingresa el nombre de la tarea" />
+                  <label htmlFor="name">Nombre:</label>
+                  <input onChange={handleChange} defaultValue={user?.name} type="text" className="form-control" id="name" name="name" required placeholder="Ingresa tu nombre completo" />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="descripcion">Usuario:</label>
-                  <input onChange={handleChange} defaultValue={user?.username} type="text" className="form-control" id="description" name="description" required placeholder="Ingresa una descripción de la tarea" />
+                  <label htmlFor="username">Usuario:</label>
+                  <input onChange={handleChange} defaultValue={user?.username} type="text" className="form-control" id="username" name="username" required placeholder="Ingresa el username nuevo" />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="descripcion">Contraseña:</label>
-                  <input onChange={handleChange} defaultValue={user?.password} type="text" className="form-control" id="description" name="description" required placeholder="Ingresa una descripción de la tarea" />
+                  <label htmlFor="password">Contraseña:</label>
+                  <input onChange={handleChange} defaultValue={user?.password} type="password" className="form-control" id="password" name="password" required placeholder="Ingresa una contraseña nueva" />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="fecha">:</label>
-                  <input onChange={handleChange} defaultValue={user?.birthday?.toString()} type="datetime-local" className="form-control" id="fecha" name="deadline" required placeholder="Ingresa la fecha de vencimiento de la tarea" />
+                  <label htmlFor="birthday">:</label>
+                  <input onChange={handleChange} defaultValue={user?.birthday?.toString()} type="datetime-local" className="form-control" id="birthday" name="birthday" required placeholder="Ingresa tu fecha de nacimiento" />
                 </div>
                 
                 <div className="d-flex justify-content-end">

@@ -7,8 +7,8 @@ const PerfilUsuario: React.FC = () => {
   const [user, setUser] = useState<User>();
   const [mostrarFormulario, setMostrarFormulario] = useState<boolean>(false);
 
-  const toggleFormulario = () => {
-    setUser(undefined)
+  const toggleFormulario = (userData: User) => {
+    setUser(userData)
     setMostrarFormulario(!mostrarFormulario);
   };
 
@@ -25,14 +25,6 @@ const PerfilUsuario: React.FC = () => {
     }
   };
 
-  const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
-    const { name, value } = e.target;
-    setUser(prevData=> ({
-      ...prevData,
-      [name]: value
-    }))
-  }
-
   if (!user)
     return;
 
@@ -40,7 +32,7 @@ const PerfilUsuario: React.FC = () => {
 
   const updateUserForm = async (user: UserUpdate) => {
     if (!user)
-      return
+      return;
     user.birthday = formatDateISOString(new Date(user.birthday!))
     try {
       await updateUserForm(user)
@@ -50,11 +42,17 @@ const PerfilUsuario: React.FC = () => {
   }
 
   const onClose = () => { 
-    setMostrarFormulario(false)
+    setMostrarFormulario(false);
+    showUserData();
   }
+
+  if (!user)
+    return;
 
   return (
     <div className="perfil-usuario">
+      <div className={`modal-backdrop fade ${mostrarFormulario ? 'show' : ''}`} style={{ zIndex: mostrarFormulario ? 1030 : -1 }}></div>
+      <ModalUserUpdate showModal={mostrarFormulario} onClose={onClose} updateUserForm={updateUserForm}/>
       <h1>Perfil de Usuario</h1>
       <Usuario
         nombre={user.name}
@@ -63,17 +61,16 @@ const PerfilUsuario: React.FC = () => {
         fechaNacimiento={bornDay.toDateString()}
         fotoUrl={user.utlPhoto}
       />
-      <ModalUserUpdate showModal={mostrarFormulario} onClose={onClose} updateUserForm={updateUserForm}></ModalUserUpdate>
-      <button className="btn btn-primary" onClick={() => toggleFormulario()}>Actualizar</button>
+      <button className="btn btn-primary" onClick={() => toggleFormulario(user)}>Actualizar</button>
     </div>
   );
 };
 
 interface User {
-  name?: string,
-  username?: string,
-  email?: string,
-  birthday?: string,
-  utlPhoto?: string
+  name: string,
+  username: string,
+  email: string,
+  birthday: string,
+  utlPhoto: string
 }
 export default PerfilUsuario;
