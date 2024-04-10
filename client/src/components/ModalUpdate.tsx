@@ -11,7 +11,6 @@ const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask, u
           const task = await getOneTask(idTask) as any;
 
           const date = new Date(task.deadline);
-          console.log(date)
           //console.log(`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}T${date.getHours()}:${date.getMinutes()}`)
           //const formatedDate = date.toISOString().slice(0, 16);
           const formatedDate = formatDateISOString(date);

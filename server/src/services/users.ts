@@ -3,11 +3,11 @@ import conn from '../db';
 export const getUserService = async (userId: string | number) => {
     //Crear la sentencia 
     const SQL = `select
-    TU.id
+    TU.id,
     TU.name,
     TU.username,
     TU.email,
-    TU.birthday,
+    TU.birthday
     from TR_USER TU
     where TU.id=?;`
 
@@ -15,13 +15,13 @@ export const getUserService = async (userId: string | number) => {
     return res;
 }
 
-export const getUsersService = async (user_id: number | string) => {
+export const getUsersService = async () => {
     const query = `SELECT 
-    TU.id
+    TU.id,
     TU.name,
     TU.username,
     TU.email,
-    TU.birthday,
+    TU.birthday
     FROM TR_USER TU;`
 
     const [users] = await conn.query(query)
@@ -45,7 +45,8 @@ export const updateUserService = async (userId: number | string, user: UpdateUse
     }
 
     // Generar la consulta SQL 1para actualizar la tarea
-    const updateSQL = "UPDATE TR_USER SET name, username, password, birthday WHERE id=?";
+    const updateSQL = `UPDATE TR_USER SET name, username, password, birthday
+    VALUES (?,?,?,?) WHERE id=?;`;
 
     try {
         await conn.execute(updateSQL, [user.name, user.username, user.password, user.birthday, userId]);

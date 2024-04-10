@@ -6,15 +6,9 @@ import Navbar from './components/Navbar';
 import ProtectedRoutes from './components/ProtectedRoutes';
 import useAuth from './hooks/useAuth';
 import PerfilUsuario from './pages/PerfilUsuario';
-import { getToken } from './services/localStorage';
 
 function App() {
   const { isAuth } = useAuth();
-  if (!isAuth)
-    return;
-
-  const token:string | null = getToken()
-  console.log(token)
 
   return (
     <>
@@ -30,7 +24,7 @@ function App() {
           } />
           <Route path='user' element={
             <ProtectedRoutes restrict={ !isAuth } redirectTo='/login'>
-              <PerfilUsuario idUser={1}/>
+              <PerfilUsuario />
             </ProtectedRoutes>
           } />
 

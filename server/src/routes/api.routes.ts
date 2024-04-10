@@ -38,7 +38,7 @@ router.route('/task/:id')
 	.patch(updateTask)
 	.delete(deleteTask);
 
-router.route('/user/id')
+router.route('/user')
 	.all(authToken)
 	.get(getOneUser)
 	.patch(updateUser)
