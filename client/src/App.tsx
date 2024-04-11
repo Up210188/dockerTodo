@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import Navbar from './components/Navbar';
 import ProtectedRoutes from './components/ProtectedRoutes';
 import useAuth from './hooks/useAuth';
+import PerfilUsuario from './pages/PerfilUsuario';
 
 function App() {
   const { isAuth } = useAuth();
@@ -19,6 +20,11 @@ function App() {
           <Route index element={
             <ProtectedRoutes restrict={!isAuth} redirectTo='/login'>
               <Home />
+            </ProtectedRoutes>
+          } />
+          <Route path='user' element={
+            <ProtectedRoutes restrict={ !isAuth } redirectTo='/login'>
+              <PerfilUsuario />
             </ProtectedRoutes>
           } />
 

@@ -1,29 +1,8 @@
 import React, { useState } from "react";
+import {createTask} from "../services/tasks.ts"
 
-interface ModalInsertProps {
-  showModal: boolean;
-  onClose: () => void;
-  createTask: (task: Task) => void;
-}
-
-interface Task {
-  id: number;
-  nombre: string;
-  descripcion: string;
-  fecha: string;
-  estatus: string;
-  prioridad: string;
-}
-
-const ModalInsert: React.FC<ModalInsertProps> = ({ showModal, onClose, createTask }) => {
-  const [formData, setFormData] = useState<Task>({
-    id: Date.now(), // Puedes generar un ID único usando Date.now() u otra estrategia
-    nombre: "",
-    descripcion: "",
-    fecha: "",
-    estatus: "",
-    prioridad: ""
-  });
+const ModalInsert: React.FC<ModalInsertProps> = ({ showModal, onClose, onTaskCreated }) => {
+  const [formData, setFormData] = useState<TaskInsert | undefined>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const { name, value } = e.target;
@@ -32,13 +11,21 @@ const ModalInsert: React.FC<ModalInsertProps> = ({ showModal, onClose, createTas
       [name]: value
     }));
   };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createTask(formData);
+    try {
+      if (!formData)
+        return;
+      await createTask(formData); // Espera a que la tarea se cree antes de cerrar el modal
+      onTaskCreated(); // Llama al callback para notificar que se creó una tarea
+    } catch (error) {
+      console.error("Error al crear la tarea:", error);
+    }
+    
     onClose(); // Cierra el modal después de agregar la tarea
   };
-
+  
   return (
     <>
       {/* Fondo oscurecido */}
@@ -50,7 +37,9 @@ const ModalInsert: React.FC<ModalInsertProps> = ({ showModal, onClose, createTas
           <div className="modal-content">
             <div className="modal-header d-flex justify-content-between">
               <h5 className="modal-title">Agregar tarea</h5>
-              <button type="button" className="close" onClick={onClose}>
+              <button type="button" className="close" onClick={() => {
+                onClose();
+                setFormData(undefined)}}>
                 <span>&times;</span>
               </button>
             </div>
@@ -58,32 +47,34 @@ const ModalInsert: React.FC<ModalInsertProps> = ({ showModal, onClose, createTas
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label htmlFor="nombre">Nombre:</label>
-                  <input onChange={handleChange} type="text" className="form-control" id="nombre" name="nombre" required placeholder="Ingresa el nombre de la tarea" />
+                  <input onChange={handleChange} type="text" className="form-control" id="nombre" name="name" required placeholder="Ingresa el nombre de la tarea" defaultValue={""}/>
                 </div>
                 <div className="form-group">
                   <label htmlFor="descripcion">Descripción:</label>
-                  <input onChange={handleChange} type="text" className="form-control" id="descripcion" name="descripcion" required placeholder="Ingresa una descripción de la tarea" />
+                  <input onChange={handleChange} type="text" className="form-control" id="descripcion" name="description" required placeholder="Ingresa una descripción de la tarea" defaultValue={""} />
                 </div>
                 <div className="form-group">
                   <label htmlFor="fecha">Fecha de vencimiento:</label>
-                  <input onChange={handleChange} type="date" className="form-control" id="fecha" name="fecha" required placeholder="Ingresa la fecha de vencimiento de la tarea" />
+                  <input onChange={handleChange} type="datetime-local" className="form-control" id="fecha" name="deadline" required placeholder="Ingresa la fecha de vencimiento de la tarea" defaultValue={""}/>
                 </div>
                 <div className="form-group">
                   <label htmlFor="estatus">Estatus:</label>
-                  <select onChange={handleChange} className="form-select" id="estatus" name="estatus">
-                    <option disabled selected value="">Selecciona un estatus</option>
-                    <option value="Completa">Completa</option>
-                    <option value="Pendiente">Pendiente</option>
-                    <option value="Incompleta">Incompleta</option>
+                  <select onChange={handleChange} defaultValue={0} className="form-select" id="estatus" name="fk_statusid">
+                    <option disabled value="0">Selecciona un estatus</option>
+                    <option value="1">Completada</option>
+                    <option value="2">En proceso</option>
+                    <option value="3">Pendiente</option>
+                    <option value="4">Cancelada</option>
                   </select>
                 </div>
                 <div className="form-group">
                   <label htmlFor="prioridad">Prioridad:</label>
-                  <select onChange={handleChange} className="form-select" id="prioridad" name="prioridad">
-                    <option disabled selected value="">Selecciona una prioridad</option>
-                    <option value="Alta">Alta</option>
-                    <option value="Media">Media</option>
-                    <option value="Baja">Baja</option>
+                  <select onChange={handleChange} defaultValue={0} className="form-select" id="prioridad" name="fk_priorityid">
+                    <option disabled value="0">Selecciona una prioridad</option>
+                    <option value="1">Altamente prioritaria</option>
+                    <option value="2">Prioritaria</option>
+                    <option value="3">Medianamente prioritaria</option>
+                    <option value="4">No prioritaria</option>
                   </select>
                 </div>
                 <div className="d-flex justify-content-end">
@@ -99,4 +90,23 @@ const ModalInsert: React.FC<ModalInsertProps> = ({ showModal, onClose, createTas
   );
 };
 
+interface ModalInsertProps {
+  showModal: boolean;
+  onClose: () => void;
+  onTaskCreated: () => void; // Nuevo callback para notificar que se creó una tarea
+}
+/*
+  "name": "Trapear",
+  "description": "Ejemplo trapear",
+  "deadline": "2024-01-15 10:00:00",
+  "fk_statusid": 1,
+  "fk_priorityid": 2
+*/
+export interface TaskInsert {
+  name?: string | undefined;
+  description?: string | undefined;
+  deadline?: string | undefined;
+  fk_statusid?: string | undefined;
+  fk_priorityid?: string | undefined;
+}
 export default ModalInsert;
