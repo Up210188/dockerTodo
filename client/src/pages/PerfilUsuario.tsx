@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Usuario from '../components/Usuario';
-import { getOneUser } from '../services/users';
-import ModalUserUpdate, { formatDateISOString, UserUpdate } from '../components/ModalUserUpdate';
+import { getOneUser, updateUser } from '../services/users';
+import ModalUserUpdate, { UserUpdate } from '../components/ModalUserUpdate';
 
 const PerfilUsuario: React.FC = () => {
   const [user, setUser] = useState<User>();
@@ -31,17 +31,18 @@ const PerfilUsuario: React.FC = () => {
   const bornDay = new Date(user.birthday!)
 
   const updateUserForm = async (user: UserUpdate) => {
+    console.log(user)
     if (!user)
       return;
-    user.birthday = formatDateISOString(new Date(user.birthday!))
     try {
-      await updateUserForm(user)
+      const res = await updateUser(user)
+      console.log(res)
     } catch (error) {
       console.error(error)
     }
   }
 
-  const onClose = () => { 
+  const onClose = () => {
     setMostrarFormulario(false);
     showUserData();
   }
@@ -50,18 +51,20 @@ const PerfilUsuario: React.FC = () => {
     return;
 
   return (
-    <div className="perfil-usuario">
-      <div className={`modal-backdrop fade ${mostrarFormulario ? 'show' : ''}`} style={{ zIndex: mostrarFormulario ? 1030 : -1 }}></div>
-      <ModalUserUpdate showModal={mostrarFormulario} onClose={onClose} updateUserForm={updateUserForm}/>
-      <h1>Perfil de Usuario</h1>
-      <Usuario
-        nombre={user.name}
-        nombreUsuario={user.username}
-        email={user.email}
-        fechaNacimiento={bornDay.toDateString()}
-        fotoUrl={user.utlPhoto}
-      />
-      <button className="btn btn-primary" onClick={() => toggleFormulario(user)}>Actualizar</button>
+    <div className='container mt-5 d-flex justify-content-center'>
+      <div className="perfil-usuario d-grid">
+        <div className={`modal-backdrop fade ${mostrarFormulario ? 'show' : ''}`} style={{ zIndex: mostrarFormulario ? 1030 : -1 }}></div>
+        <ModalUserUpdate showModal={mostrarFormulario} onClose={onClose} updateUserForm={updateUserForm} />
+        <h1>Perfil de Usuario</h1>
+        <Usuario
+          nombre={user.name}
+          nombreUsuario={user.username}
+          email={user.email}
+          fechaNacimiento={bornDay.toDateString()}
+          fotoUrl={user.utlPhoto}
+        />
+        <button className="btn btn-primary" onClick={() => toggleFormulario(user)}>Actualizar</button>
+      </div>
     </div>
   );
 };

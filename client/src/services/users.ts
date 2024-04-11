@@ -24,18 +24,18 @@ export const getOneUser = async () => {
     return data;
   };
 
-export const updateUser = async (Data: UserUpdate, newData: UserUpdate) => {
+export const updateUser = async (data: UserUpdate) => {
   const USER_URL = new URL('user', BASE_URL);
 
-  const body = Object.assign(Data, newData)
+  console.log(JSON.stringify(data))
 
   return await fetch(USER_URL, {
     method: 'PATCH',
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer: ${getToken()}`
+      "Authorization": `Bearer ${getToken()}`
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify(data)
   }).then((res)=>{
     if (!res.ok) {
       throw new Error("No se pudo modificar el usuario.");

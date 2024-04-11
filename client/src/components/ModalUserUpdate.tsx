@@ -6,25 +6,25 @@ const ModalUserUpdate: React.FC<ModalUserUpdateProps> = ({ showModal, onClose, u
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   useEffect(() => {
-    (async ()=> {
-        try {
-            const getUser = await getOneUser();
-            setUser(getUser)
+    (async () => {
+      try {
+        const getUser = await getOneUser();
+        setUser(getUser)
 
-            if (!user)
-                return;
-            const birthday = new Date(user.birthday!)
-            const formatedDate = formatDateISOString(new Date(birthday))
-            setUser({
-                name: user.name,
-                birthday: formatedDate,
-                username: user.username
-              })
-        } catch (error) {
-            console.error(error)
-        }
+        if (!user)
+          return;
+        const birthday = new Date(user.birthday!)
+        const formatedDate = formatDateISOString(new Date(birthday))
+        setUser({
+          name: user.name,
+          birthday: formatedDate,
+          username: user.username
+        })
+      } catch (error) {
+        console.error(error)
+      }
     })()
-    return ()=> {
+    return () => {
       setUser(undefined)
     }
   }, [showModal])
@@ -37,7 +37,7 @@ const ModalUserUpdate: React.FC<ModalUserUpdateProps> = ({ showModal, onClose, u
     }));
   };
 
-  
+
   if (!user) return;
 
   return (
@@ -73,18 +73,38 @@ const ModalUserUpdate: React.FC<ModalUserUpdateProps> = ({ showModal, onClose, u
                 </div>
                 <div className="form-group">
                   <label htmlFor="password">Contraseña:</label>
-                  <div>
-                    <input onChange={handleChange} type={ showPassword ? `text` : `password` } className="form-control" id="password" name="password" required placeholder="Ingresa una contraseña nueva" />
+                  <div className="d-flex justify-content-start align-items-center" style={{ backgroundColor: 'white', margin: 0, padding: 0, borderRadius: 5 }}>
+                    <input
+                      onChange={handleChange}
+                      type={showPassword ? `text` : `password`}
+                      className="form-control"
+                      id="password"
+                      name="password"
+                      required placeholder="Ingresa una contraseña nueva"
+                      style={{ width: '90%' }} />
+                    <div className="btn" style={{
+                        borderColor: 'black',
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        alignItems: 'center',
+                        width: '10%',
+                        height: '100%'
+                      }}>
+                      <img 
+                      src={showPassword ? '/src/assets/ojo(1).png' : '/src/assets/ojo.png'} 
+                      onClick={() => { showPassword ? setShowPassword(false) : setShowPassword(true) }} 
+                      style={{width: '100%'}}/>
+                    </div>
                   </div>
                 </div>
                 <div className="form-group">
                   <label htmlFor="birthday">Fecha de nacimiento:</label>
                   <input onChange={handleChange} defaultValue={user.birthday?.toString()} type="datetime-local" className="form-control" id="birthday" name="birthday" required placeholder="Ingresa tu fecha de nacimiento" />
                 </div>
-                
+
                 <div className="d-flex justify-content-end">
                   <button type="button" className="btn btn-primary me-2" onClick={onClose}>Cerrar</button>
-                  <button type="button" className="btn btn-secondary" onClick={()=>{updateUserForm(user); onClose();}}>Actualizar</button>
+                  <button type="button" className="btn btn-secondary" onClick={() => { updateUserForm(user); onClose(); }}>Actualizar</button>
                 </div>
               </form>
             </div>
@@ -105,14 +125,14 @@ export const formatDateISOString = (date: Date): string => {
   // Construir la cadena de fecha y hora manualmente
   var cadenaFechaHora = año + '-' + mes + '-' + día + 'T' + hora + ':' + minuto;
 
- return(cadenaFechaHora); // Salida: "2024-04-03T17:40"
+  return (cadenaFechaHora); // Salida: "2024-04-03T17:40"
 };
 export default ModalUserUpdate;
 
 interface ModalUserUpdateProps {
   showModal: boolean;
   onClose: () => void;
-  updateUserForm: (user:UserUpdate) => void;
+  updateUserForm: (user: UserUpdate) => void;
 }
 
 export interface UserUpdate {
