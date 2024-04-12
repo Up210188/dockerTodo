@@ -3,11 +3,11 @@ import { getOneTask } from "../services/tasks";
 
 const ModalUpdate: React.FC<ModalUpdateProps> = ({ showModal, onClose, idTask, updateTaskForm }) => {
   const [task, setTask] = useState<TaskUpdate>({
-    name: "",
-    description: "",
-    deadline: "",
-    fk_priorityid: "",
-    fk_statusid: ""
+    name: undefined,
+    description: undefined,
+    deadline: undefined,
+    fk_priorityid: undefined,
+    fk_statusid: undefined
   });
   const [validationError, setValidationError] = useState<string>("");
 
