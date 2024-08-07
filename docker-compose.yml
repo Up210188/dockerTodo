@@ -1,0 +1,42 @@
+services:
+  todo-server:
+    build:
+      context: ./server
+    container_name: TodoServer
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db-todo-app
+
+  todo-client:
+    build:
+      context: ./client
+    container_name: TodoClient
+    ports:
+      - "80:5173"
+    networks:
+      - todo-app
+    depends_on:
+      - todo-server
+
+  db-todo-app:
+    image: mysql:8.0
+    container_name: dbTodoApp
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "${SET_ROOT_PASSWORD:-root}"
+      MYSQL_DATABASE: "${DB_NAME:-dbTodoApp}"
+      MYSQL_USER: "${DB_USER:-test}"
+      MYSQL_PASSWORD: "${DB_PASS:-test}"
+    volumes:
+      - ./db:/home/
+    command: mysqld --default-authentication-plugin=mysql_native_password --sql-mode="STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  todo-app:
+    driver: bridge
